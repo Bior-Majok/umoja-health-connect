@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Umoja Health Connect — Provider Login</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="brand">Umoja Health Connect — Providers</div>
+    <nav>
+      <a href="provider-register.html">Register</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="card">
+      <h1>Provider login</h1>
+      <div id="message" class="message"></div>
+      <form onsubmit="handleProviderLogin(event)">
+        <div class="field">
+          <label for="phone_number">Phone number</label>
+          <input type="tel" id="phone_number" name="phone_number" required />
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <button type="submit" class="primary">Log in</button>
+      </form>
+      <div class="alt-link">
+        Not registered yet? <a href="provider-register.html">Register here</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script src="provider.js"></script>
+</body>
+</html>

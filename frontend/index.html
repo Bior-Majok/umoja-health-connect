@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Umoja Health Connect — Login</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body onload="initLoginPage()">
+  <header>
+    <div class="brand">Umoja Health Connect</div>
+    <nav>
+      <a id="nav-dashboard" href="dashboard.html" style="display:none">Dashboard</a>
+      <select id="language-select" class="lang-select">
+        <option value="en">EN</option>
+        <option value="fr">FR</option>
+        <option value="sw">SW</option>
+        <option value="ar">AR</option>
+      </select>
+    </nav>
+  </header>
+
+  <main>
+    <div class="hero-shell">
+      <div class="hero-copy">
+        <p class="eyebrow">Healthcare made easy, anywhere</p>
+        <h1>Quality care for every <span class="accent">African community.</span></h1>
+        <p class="lede">
+          Connect with verified healthcare providers, report symptoms, book appointments, and
+          trigger emergency alerts — over the internet or plain SMS, no smartphone required.
+        </p>
+        <ul class="hero-bullets">
+          <li><span class="icon-badge">📱</span> SMS &amp; mobile access, even offline</li>
+          <li><span class="icon-badge">🩺</span> Qualified, verified healthcare providers</li>
+          <li><span class="icon-badge">🚨</span> One-tap emergency alerts</li>
+          <li><span class="icon-badge">🌍</span> Built for low-resource African communities</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h1>Log in to your account</h1>
+        <div id="message" class="message"></div>
+        <form onsubmit="handleLogin(event)">
+          <div class="field">
+            <label for="phone_number">Phone number</label>
+            <input type="tel" id="phone_number" name="phone_number" required />
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required />
+          </div>
+          <button type="submit" class="primary">Log in</button>
+        </form>
+        <div class="alt-link">
+          Don't have an account? <a href="register.html">Register here</a>
+        </div>
+        <div class="alt-link" style="margin-top: 0.5rem; font-size: 0.8rem;">
+          <a href="provider-login.html">Healthcare provider</a> ·
+          <a href="volunteer-login.html">Community volunteer</a> ·
+          <a href="admin-login.html">Administrator</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script src="i18n.js"></script>
+</body>
+</html>

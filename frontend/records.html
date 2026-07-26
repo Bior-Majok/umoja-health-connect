@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Umoja Health Connect — Medical Records</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body onload="initRecords()">
+  <header>
+    <div class="brand">Umoja Health Connect</div>
+    <nav>
+      <select id="language-select" class="lang-select">
+        <option value="en">EN</option>
+        <option value="fr">FR</option>
+        <option value="sw">SW</option>
+        <option value="ar">AR</option>
+      </select>
+      <button id="logout-btn">Log out</button>
+    </nav>
+  </header>
+
+  <main>
+    <div class="card wide">
+      <div class="tabs">
+        <a href="dashboard.html">Profile</a>
+        <a href="appointments.html">Appointments</a>
+        <a href="records.html" class="active">Medical Records</a>
+        <a href="symptom-report.html">Report Symptoms</a>
+        <a href="health-education.html">Health Education</a>
+      </div>
+
+      <div class="section-header">
+        <h1>Medical records</h1>
+        <button class="secondary" id="new-record-btn">+ Add record</button>
+      </div>
+
+      <div id="records-list"></div>
+    </div>
+  </main>
+
+  <div class="modal-overlay" id="record-modal">
+    <div class="modal">
+      <h1>Add a medical record</h1>
+      <div id="record-message" class="message"></div>
+      <form id="record-form">
+        <div class="field">
+          <label for="title">Title</label>
+          <input type="text" id="title" name="title" required />
+        </div>
+        <div class="field">
+          <label for="details">Details (optional)</label>
+          <input type="text" id="details" name="details" />
+        </div>
+        <div class="field">
+          <label for="recorded_at">Date recorded</label>
+          <input type="datetime-local" id="recorded_at" name="recorded_at" />
+        </div>
+        <div class="field">
+          <label for="status">Status</label>
+          <select id="status" name="status">
+            <option value="normal">Normal</option>
+            <option value="flagged">Flagged</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="secondary" id="record-modal-cancel">Cancel</button>
+          <button type="submit" class="primary">Save record</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="i18n.js"></script>
+  <script src="emergency.js"></script>
+</body>
+</html>

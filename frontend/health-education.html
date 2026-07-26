@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Umoja Health Connect — Health Education</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body onload="initHealthEducation()">
+  <header>
+    <div class="brand">Umoja Health Connect</div>
+    <nav>
+      <select id="language-select" class="lang-select">
+        <option value="en">EN</option>
+        <option value="fr">FR</option>
+        <option value="sw">SW</option>
+        <option value="ar">AR</option>
+      </select>
+      <button id="logout-btn">Log out</button>
+    </nav>
+  </header>
+
+  <main>
+    <div class="card wide">
+      <div class="tabs">
+        <a href="dashboard.html">Profile</a>
+        <a href="appointments.html">Appointments</a>
+        <a href="records.html">Medical Records</a>
+        <a href="symptom-report.html">Report Symptoms</a>
+        <a href="health-education.html" class="active">Health Education</a>
+      </div>
+
+      <div class="section-header">
+        <h1>Health education library</h1>
+        <button class="secondary" id="download-offline-btn">Download for offline</button>
+      </div>
+      <div id="offline-message" class="message"></div>
+
+      <div id="article-list"></div>
+    </div>
+  </main>
+
+  <div class="modal-overlay" id="article-modal">
+    <div class="modal">
+      <h1 id="article-title"></h1>
+      <p id="article-body" style="white-space: pre-wrap;"></p>
+      <div class="modal-actions">
+        <button type="button" class="secondary" id="article-modal-close">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="i18n.js"></script>
+  <script src="emergency.js"></script>
+</body>
+</html>

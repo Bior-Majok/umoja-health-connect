@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Umoja Health Connect — Admin Login</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="brand">Umoja Health Connect — Admin</div>
+  </header>
+
+  <main>
+    <div class="card">
+      <h1>Administrator login</h1>
+      <p style="color: var(--muted); font-size: 0.85rem; margin-top: -0.5rem;">
+        Administrator accounts are provisioned by the platform team — there is no self-registration.
+      </p>
+      <div id="message" class="message"></div>
+      <form onsubmit="handleAdminLogin(event)">
+        <div class="field">
+          <label for="phone_number">Phone number</label>
+          <input type="tel" id="phone_number" name="phone_number" required />
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <button type="submit" class="primary">Log in</button>
+      </form>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

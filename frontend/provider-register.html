@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Umoja Health Connect — Provider Registration</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="brand">Umoja Health Connect — Providers</div>
+    <nav>
+      <a href="provider-login.html">Login</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="card">
+      <h1>Register as a healthcare provider</h1>
+      <p style="color: var(--muted); font-size: 0.85rem; margin-top: -0.5rem;">
+        Your account will need to be verified by an administrator before you can log in.
+      </p>
+      <div id="message" class="message"></div>
+      <form onsubmit="handleProviderRegister(event)">
+        <div class="field">
+          <label for="full_name">Full name</label>
+          <input type="text" id="full_name" name="full_name" required />
+        </div>
+        <div class="field">
+          <label for="phone_number">Phone number</label>
+          <input type="tel" id="phone_number" name="phone_number" required />
+        </div>
+        <div class="field">
+          <label for="specialization">Specialization</label>
+          <input type="text" id="specialization" name="specialization" required />
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="country">Country</label>
+            <input type="text" id="country" name="country" required />
+          </div>
+          <div class="field">
+            <label for="region">Region</label>
+            <input type="text" id="region" name="region" required />
+          </div>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" minlength="6" required />
+        </div>
+        <button type="submit" class="primary">Register</button>
+      </form>
+      <div class="alt-link">
+        Already verified? <a href="provider-login.html">Log in</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script src="provider.js"></script>
+</body>
+</html>

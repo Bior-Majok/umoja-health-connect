@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Umoja Health Connect — Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body onload="initDashboard()">
+  <header>
+    <div class="brand">Umoja Health Connect</div>
+    <nav>
+      <select id="language-select" class="lang-select">
+        <option value="en">EN</option>
+        <option value="fr">FR</option>
+        <option value="sw">SW</option>
+        <option value="ar">AR</option>
+      </select>
+      <button id="logout-btn">Log out</button>
+    </nav>
+  </header>
+
+  <main class="main-top">
+    <div class="dashboard-shell">
+      <div class="dash-welcome">
+        <p class="eyebrow">Welcome back</p>
+        <h1 id="welcome-name">—</h1>
+        <p class="lede">Here's what's happening with your care today.</p>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-tile">
+          <span class="stat-num" id="stat-appointments">—</span>
+          <span class="stat-label">Upcoming appointments</span>
+        </div>
+        <div class="stat-tile">
+          <span class="stat-num" id="stat-consultations">—</span>
+          <span class="stat-label">Active consultations</span>
+        </div>
+        <div class="stat-tile">
+          <span class="stat-num" id="stat-records">—</span>
+          <span class="stat-label">Medical records</span>
+        </div>
+      </div>
+
+      <div class="quick-grid">
+        <a class="quick-card" href="appointments.html">
+          <span class="quick-icon">📅</span>
+          <span class="quick-text">
+            <span class="quick-title">Book appointment</span>
+            <span class="quick-sub">Schedule with a provider</span>
+          </span>
+          <span class="quick-arrow">→</span>
+        </a>
+        <a class="quick-card" href="symptom-report.html">
+          <span class="quick-icon">📝</span>
+          <span class="quick-text">
+            <span class="quick-title">Report symptoms</span>
+            <span class="quick-sub">Get matched to a provider</span>
+          </span>
+          <span class="quick-arrow">→</span>
+        </a>
+        <a class="quick-card" href="records.html">
+          <span class="quick-icon">📁</span>
+          <span class="quick-text">
+            <span class="quick-title">Medical records</span>
+            <span class="quick-sub">View your health history</span>
+          </span>
+          <span class="quick-arrow">→</span>
+        </a>
+        <a class="quick-card" href="health-education.html">
+          <span class="quick-icon">📚</span>
+          <span class="quick-text">
+            <span class="quick-title">Health education</span>
+            <span class="quick-sub">Learn in your language</span>
+          </span>
+          <span class="quick-arrow">→</span>
+        </a>
+        <button type="button" class="quick-card quick-card-emergency" id="dash-emergency-btn">
+          <span class="quick-icon">🚨</span>
+          <span class="quick-text">
+            <span class="quick-title">Emergency alert</span>
+            <span class="quick-sub">Notify nearby providers now</span>
+          </span>
+          <span class="quick-arrow">→</span>
+        </button>
+      </div>
+
+      <div class="card wide">
+        <div class="tabs">
+          <a href="dashboard.html" class="active">Profile</a>
+          <a href="appointments.html">Appointments</a>
+          <a href="records.html">Medical Records</a>
+          <a href="symptom-report.html">Report Symptoms</a>
+          <a href="health-education.html">Health Education</a>
+        </div>
+        <div class="section-header">
+          <span class="patient-id-badge">ID: <span id="patient-id"></span></span>
+          <a href="profile-edit.html"><button class="secondary" type="button">Edit profile</button></a>
+        </div>
+        <h1 id="full-name"></h1>
+        <div class="profile-grid">
+          <div>
+            <div class="label">Phone number</div>
+            <div class="value" id="phone-number"></div>
+          </div>
+          <div>
+            <div class="label">Age</div>
+            <div class="value" id="age"></div>
+          </div>
+          <div>
+            <div class="label">Gender</div>
+            <div class="value" id="gender"></div>
+          </div>
+          <div>
+            <div class="label">Country</div>
+            <div class="value" id="country"></div>
+          </div>
+          <div>
+            <div class="label">Region</div>
+            <div class="value" id="region"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script src="i18n.js"></script>
+  <script src="emergency.js"></script>
+</body>
+</html>

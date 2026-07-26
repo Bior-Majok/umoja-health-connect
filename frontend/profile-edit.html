@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Umoja Health Connect — Edit Profile</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body onload="initEditProfile()">
+  <header>
+    <div class="brand">Umoja Health Connect</div>
+    <nav>
+      <select id="language-select" class="lang-select">
+        <option value="en">EN</option>
+        <option value="fr">FR</option>
+        <option value="sw">SW</option>
+        <option value="ar">AR</option>
+      </select>
+      <button id="logout-btn">Log out</button>
+    </nav>
+  </header>
+
+  <main>
+    <div class="card">
+      <h1>Edit your profile</h1>
+      <div id="message" class="message"></div>
+      <form id="edit-profile-form">
+        <div class="field">
+          <label for="full_name">Full name</label>
+          <input type="text" id="full_name" name="full_name" required />
+        </div>
+        <div class="field">
+          <label for="phone_number">Phone number</label>
+          <input type="tel" id="phone_number" name="phone_number" required />
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="age">Age</label>
+            <input type="number" id="age" name="age" min="0" max="120" required />
+          </div>
+          <div class="field">
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender" required>
+              <option value="Female">Female</option>
+              <option value="Male">Male</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="country">Country</label>
+            <input type="text" id="country" name="country" required />
+          </div>
+          <div class="field">
+            <label for="region">Region</label>
+            <input type="text" id="region" name="region" required />
+          </div>
+        </div>
+        <div class="field">
+          <label for="family_contact_phone">Family contact phone (optional)</label>
+          <input type="tel" id="family_contact_phone" name="family_contact_phone" />
+        </div>
+        <button type="submit" class="primary">Save changes</button>
+      </form>
+      <div class="alt-link">
+        <a href="dashboard.html">Cancel and go back</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script src="i18n.js"></script>
+  <script src="emergency.js"></script>
+</body>
+</html>

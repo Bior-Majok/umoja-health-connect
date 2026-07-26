@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Umoja Health Connect — Volunteer Registration</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="brand">Umoja Health Connect — Volunteers</div>
+    <nav>
+      <a href="volunteer-login.html">Login</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="card">
+      <h1>Register as a community health volunteer</h1>
+      <div id="message" class="message"></div>
+      <form onsubmit="handleVolunteerRegister(event)">
+        <div class="field">
+          <label for="full_name">Full name</label>
+          <input type="text" id="full_name" name="full_name" required />
+        </div>
+        <div class="field">
+          <label for="phone_number">Phone number</label>
+          <input type="tel" id="phone_number" name="phone_number" required />
+        </div>
+        <div class="field">
+          <label for="assigned_region">Assigned region</label>
+          <input type="text" id="assigned_region" name="assigned_region" required />
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" minlength="6" required />
+        </div>
+        <button type="submit" class="primary">Register</button>
+      </form>
+      <div class="alt-link">
+        Already registered? <a href="volunteer-login.html">Log in</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script src="volunteer.js"></script>
+</body>
+</html>

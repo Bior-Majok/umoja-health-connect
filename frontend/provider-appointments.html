@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Umoja Health Connect — Provider Appointments</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body onload="initProviderAppointments()">
+  <header>
+    <div class="brand">Umoja Health Connect — Providers</div>
+    <nav>
+      <button id="logout-btn">Log out</button>
+    </nav>
+  </header>
+
+  <main>
+    <div class="card wide">
+      <div class="tabs">
+        <a href="provider-dashboard.html">Consultations</a>
+        <a href="provider-appointments.html" class="active">Appointments</a>
+        <a href="provider-alerts.html">Emergency Alerts</a>
+      </div>
+
+      <h1>Your appointments</h1>
+      <div id="provider-appointments-list"></div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script src="provider.js"></script>
+</body>
+</html>

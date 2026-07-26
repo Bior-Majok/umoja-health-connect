@@ -1,0 +1,10 @@
+venv/
+__pycache__/
+*.pyc
+*.db
+.env
+instance/
+.pytest_cache/
+
+# Android app kept local only — not part of this submission (see README)
+android/

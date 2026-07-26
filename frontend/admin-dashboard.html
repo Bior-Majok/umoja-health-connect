@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Umoja Health Connect — Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body onload="initAdminDashboard()">
+  <header>
+    <div class="brand">Umoja Health Connect — Admin</div>
+    <nav>
+      <button id="logout-btn">Log out</button>
+    </nav>
+  </header>
+
+  <main>
+    <div class="card wide">
+      <h1>Healthcare providers</h1>
+      <p style="color: var(--muted); font-size: 0.85rem;">Verify new providers before they can accept consultations, or suspend an existing one.</p>
+      <div id="providers-list"></div>
+
+      <h1 style="margin-top: 2rem;">Platform reports</h1>
+      <div id="reports-summary"></div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
