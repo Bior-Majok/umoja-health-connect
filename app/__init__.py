@@ -10,6 +10,8 @@ jwt = JWTManager()
 def create_app(config_overrides=None):
     app = Flask(__name__, static_folder='../frontend', static_url_path='')
     app.config.from_object(Config)
+    # Avoid stale HTML/CSS/JS in the browser during active development.
+    app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
     if config_overrides:
         app.config.update(config_overrides)
 
@@ -29,6 +31,7 @@ def create_app(config_overrides=None):
     from app.routes.health_education import health_education_bp
     from app.routes.admin_reports import admin_reports_bp
     from app.routes.labels import labels_bp
+    from app.routes.health_facilities import health_facilities_bp
 
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(provider_auth_bp, url_prefix='/api/auth/provider')
@@ -42,6 +45,7 @@ def create_app(config_overrides=None):
     app.register_blueprint(health_education_bp, url_prefix='/api/health-education')
     app.register_blueprint(admin_reports_bp, url_prefix='/api/admin/reports')
     app.register_blueprint(labels_bp, url_prefix='/api/labels')
+    app.register_blueprint(health_facilities_bp, url_prefix='/api/facilities')
 
     @app.route('/')
     def index():
