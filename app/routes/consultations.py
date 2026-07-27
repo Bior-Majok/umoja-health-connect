@@ -25,8 +25,14 @@ def _assign_provider(patient):
             return None
         return min(candidates, key=lambda p: load_by_provider.get(p.provider_id, 0))
 
-    regional = HealthcareProvider.query.filter_by(
-        is_verified=True, is_available=True, region=patient.region
+    # Region is free text on both sides (registration forms), so match tolerant of
+    # case/whitespace differences (e.g. "Nairobi" vs "nairobi " ) rather than an exact
+    # string match, which would silently fail to find an otherwise-matching provider.
+    patient_region = (patient.region or '').strip().lower()
+    regional = HealthcareProvider.query.filter(
+        HealthcareProvider.is_verified.is_(True),
+        HealthcareProvider.is_available.is_(True),
+        db.func.lower(db.func.trim(HealthcareProvider.region)) == patient_region,
     ).all()
     chosen = pick(regional)
     if chosen:
@@ -113,11 +119,12 @@ def respond_consultation(consultation_id):
     consultation.response_notes = data.get('response_notes', consultation.response_notes)
     consultation.status = status
 
+    patient = Patient.query.filter_by(patient_id=consultation.patient_id).first()
+
     urgency = data.get('urgency')
     escalated_alert = None
     if urgency == 'critical':
         consultation.urgency = 'critical'
-        patient = Patient.query.filter_by(patient_id=consultation.patient_id).first()
         escalated_alert = EmergencyAlert(
             patient_id=patient.patient_id,
             location=f'{patient.region}, {patient.country}',
@@ -127,6 +134,10 @@ def respond_consultation(consultation_id):
         )
         db.session.add(escalated_alert)
         send_sms(patient.phone_number, 'Your case has been escalated as urgent. A provider will contact you shortly.')
+    else:
+        # The critical path already notifies the patient above — for a routine
+        # response, still let them know so they aren't left checking the app blindly.
+        send_sms(patient.phone_number, 'A healthcare provider has responded to your consultation. Open the app to see their notes.')
 
     db.session.commit()
 

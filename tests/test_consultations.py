@@ -56,3 +56,40 @@ def test_respond_requires_assigned_provider(client, auth_headers, provider_heade
     headers, provider_id = provider_headers
     res = client.patch("/api/consultations/999/respond", headers=headers, json={"status": "responded"})
     assert res.status_code == 404
+
+
+def test_region_matching_is_case_and_whitespace_tolerant(client, admin_headers, auth_headers):
+    # Patient region fixture is "Nairobi" — register a provider with mismatched
+    # case/whitespace and confirm auto-assignment still finds them.
+    reg = client.post("/api/auth/provider/register", json={
+        "full_name": "Dr. Messy Region",
+        "phone_number": "+254733221100",
+        "specialization": "General Medicine",
+        "country": "Kenya",
+        "region": "  nairobi ",
+        "password": "providerpass123",
+    })
+    provider_id = reg.get_json()["provider"]["provider_id"]
+    client.patch(f"/api/providers/{provider_id}/verify", headers=admin_headers)
+
+    res = client.post("/api/consultations", headers=auth_headers, json={"symptoms": "Cough"})
+    assert res.status_code == 201
+    assert res.get_json()["consultation"]["provider_id"] == provider_id
+
+
+def test_routine_response_notifies_patient_by_sms(client, app, auth_headers, provider_headers):
+    headers, provider_id = provider_headers
+    create = client.post("/api/consultations", headers=auth_headers, json={"symptoms": "Mild cough"})
+    consultation_id = create.get_json()["consultation"]["id"]
+
+    respond = client.patch(f"/api/consultations/{consultation_id}/respond", headers=headers, json={
+        "response_notes": "Rest and fluids",
+        "status": "closed",
+    })
+    assert respond.status_code == 200
+    assert "emergency_alert" not in respond.get_json()
+
+    with app.app_context():
+        from app.models.notification_log import NotificationLog
+        patient_sms = NotificationLog.query.filter_by(recipient="+254700000000", channel="sms").all()
+        assert any("responded" in log.message for log in patient_sms)

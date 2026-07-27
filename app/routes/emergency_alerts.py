@@ -45,7 +45,11 @@ def trigger_alert():
     db.session.add(alert)
     db.session.commit()
 
-    providers = HealthcareProvider.query.filter_by(is_verified=True, region=patient.region).all()
+    patient_region = (patient.region or '').strip().lower()
+    providers = HealthcareProvider.query.filter(
+        HealthcareProvider.is_verified.is_(True),
+        db.func.lower(db.func.trim(HealthcareProvider.region)) == patient_region,
+    ).all()
     for provider in providers:
         send_push(provider.phone_number, 'EMERGENCY ALERT', f'{patient.full_name} at {alert.location}: {alert.condition}')
     send_sms(NEAREST_FACILITY_CONTACT, f'Emergency: {patient.full_name} at {alert.location}: {alert.condition}')
@@ -70,7 +74,13 @@ def list_alerts():
         query = query.filter_by(triggered_by_volunteer_id=identity)
     elif role == 'provider':
         provider = HealthcareProvider.query.filter_by(provider_id=identity).first()
-        patient_ids = [p.patient_id for p in Patient.query.filter_by(region=provider.region).all()]
+        provider_region = (provider.region or '').strip().lower()
+        patient_ids = [
+            p.patient_id
+            for p in Patient.query.filter(
+                db.func.lower(db.func.trim(Patient.region)) == provider_region
+            ).all()
+        ]
         query = query.filter(EmergencyAlert.patient_id.in_(patient_ids))
     # admin: no filter
 
