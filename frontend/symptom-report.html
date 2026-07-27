@@ -16,22 +16,22 @@
         <option value="sw">SW</option>
         <option value="ar">AR</option>
       </select>
-      <button id="logout-btn">Log out</button>
+      <button id="logout-btn" data-i18n="logout">Log out</button>
     </nav>
   </header>
 
   <main>
     <div class="card wide">
       <div class="tabs">
-        <a href="dashboard.html">Profile</a>
-        <a href="appointments.html">Appointments</a>
-        <a href="records.html">Medical Records</a>
-        <a href="symptom-report.html" class="active">Report Symptoms</a>
-        <a href="health-education.html">Health Education</a>
+        <a href="dashboard.html" data-i18n="profile">Profile</a>
+        <a href="appointments.html" data-i18n="appointments">Appointments</a>
+        <a href="records.html" data-i18n="medical_records">Medical Records</a>
+        <a href="symptom-report.html" class="active" data-i18n="report_symptoms">Report Symptoms</a>
+        <a href="health-education.html" data-i18n="health_education">Health Education</a>
       </div>
 
-      <h1>Report your symptoms</h1>
-      <p style="color: var(--muted); font-size: 0.9rem; margin-top: -0.5rem;">
+      <h1 data-i18n="symptom_report_heading">Report your symptoms</h1>
+      <p style="color: var(--muted); font-size: 0.9rem; margin-top: -0.5rem;" data-i18n="symptom_report_desc">
         Choose everything that applies, and add anything else in your own words. A verified
         healthcare provider will be assigned to your case automatically.
       </p>
@@ -39,27 +39,27 @@
 
       <form id="symptom-form">
         <div class="symptom-checklist" id="symptom-checklist">
-          <label><input type="checkbox" value="Fever" /> Fever</label>
-          <label><input type="checkbox" value="Cough" /> Cough</label>
-          <label><input type="checkbox" value="Headache" /> Headache</label>
-          <label><input type="checkbox" value="Diarrhea" /> Diarrhea</label>
-          <label><input type="checkbox" value="Vomiting" /> Vomiting</label>
-          <label><input type="checkbox" value="Body aches" /> Body aches</label>
-          <label><input type="checkbox" value="Difficulty breathing" /> Difficulty breathing</label>
-          <label><input type="checkbox" value="Rash" /> Rash</label>
-          <label><input type="checkbox" value="Bleeding" /> Bleeding</label>
-          <label><input type="checkbox" value="Fatigue" /> Fatigue</label>
+          <label><input type="checkbox" value="Fever" /> <span data-i18n="symptom_fever">Fever</span></label>
+          <label><input type="checkbox" value="Cough" /> <span data-i18n="symptom_cough">Cough</span></label>
+          <label><input type="checkbox" value="Headache" /> <span data-i18n="symptom_headache">Headache</span></label>
+          <label><input type="checkbox" value="Diarrhea" /> <span data-i18n="symptom_diarrhea">Diarrhea</span></label>
+          <label><input type="checkbox" value="Vomiting" /> <span data-i18n="symptom_vomiting">Vomiting</span></label>
+          <label><input type="checkbox" value="Body aches" /> <span data-i18n="symptom_bodyaches">Body aches</span></label>
+          <label><input type="checkbox" value="Difficulty breathing" /> <span data-i18n="symptom_breathing">Difficulty breathing</span></label>
+          <label><input type="checkbox" value="Rash" /> <span data-i18n="symptom_rash">Rash</span></label>
+          <label><input type="checkbox" value="Bleeding" /> <span data-i18n="symptom_bleeding">Bleeding</span></label>
+          <label><input type="checkbox" value="Fatigue" /> <span data-i18n="symptom_fatigue">Fatigue</span></label>
         </div>
 
         <div class="field">
-          <label for="free_text">Describe in your own words (optional)</label>
+          <label for="free_text" data-i18n="describe_own_words">Describe in your own words (optional)</label>
           <input type="text" id="free_text" name="free_text" />
         </div>
 
-        <button type="submit" class="primary">Submit report</button>
+        <button type="submit" class="primary" data-i18n="submit_report">Submit report</button>
       </form>
 
-      <h1 style="margin-top: 2rem;">Your consultations</h1>
+      <h1 style="margin-top: 2rem;" data-i18n="your_consultations">Your consultations</h1>
       <div id="consultations-list"></div>
     </div>
   </main>

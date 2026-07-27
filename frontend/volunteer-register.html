@@ -15,6 +15,7 @@
   </header>
 
   <main>
+    <div class="auth-decor" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
     <div class="card">
       <h1>Register as a community health volunteer</h1>
       <div id="message" class="message"></div>
@@ -33,7 +34,19 @@
         </div>
         <div class="field">
           <label for="password">Password</label>
-          <input type="password" id="password" name="password" minlength="6" required />
+          <div class="password-wrap">
+            <input type="password" id="password" name="password" minlength="6" required />
+            <button type="button" class="password-toggle" data-target="password" aria-label="Show password">
+              <svg class="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg class="icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a20.3 20.3 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a20.3 20.3 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="field field-checkbox">
+          <label class="checkbox-label">
+            <input type="checkbox" id="accept_terms" name="accept_terms" required />
+            <span>I agree to the <a href="#" id="view-terms-link">Volunteer Terms &amp; Conditions</a></span>
+          </label>
         </div>
         <button type="submit" class="primary">Register</button>
       </form>
@@ -42,6 +55,34 @@
       </div>
     </div>
   </main>
+
+  <div class="modal-overlay" id="terms-modal">
+    <div class="modal">
+      <h1>Volunteer Terms &amp; Conditions</h1>
+      <div class="terms-body">
+        <h2>Acting on behalf of patients</h2>
+        <p>
+          As a community health volunteer, you may submit consultations and trigger emergency
+          alerts on behalf of patients who cannot use the platform directly. You agree to only do
+          so with the patient's knowledge and consent.
+        </p>
+        <h2>Accuracy</h2>
+        <p>
+          You agree to report symptoms and conditions as accurately as possible, based on what
+          the patient tells you or what you directly observe.
+        </p>
+        <h2>Scope of service</h2>
+        <p>
+          Volunteers do not provide medical diagnosis or treatment — your role is to help patients
+          reach a verified healthcare provider through the platform.
+        </p>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="secondary" id="terms-modal-close">Close</button>
+        <button type="button" class="primary" id="terms-modal-accept" style="width:auto;">I Accept</button>
+      </div>
+    </div>
+  </div>
 
   <script src="app.js"></script>
   <script src="volunteer.js"></script>

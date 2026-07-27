@@ -23,36 +23,56 @@
   <main>
     <div class="hero-shell">
       <div class="hero-copy">
-        <p class="eyebrow">Healthcare made easy, anywhere</p>
+        <div class="hero-bg" aria-hidden="true">
+          <img src="images/doctor-consult.jpg" alt="" />
+          <div class="hero-bg-overlay"></div>
+        </div>
+        <p class="eyebrow" data-i18n="tagline">Healthcare made easy, anywhere</p>
         <h1>Quality care for every <span class="accent">African community.</span></h1>
-        <p class="lede">
+        <p class="lede" data-i18n="hero_lede">
           Connect with verified healthcare providers, report symptoms, book appointments, and
           trigger emergency alerts — over the internet or plain SMS, no smartphone required.
         </p>
         <ul class="hero-bullets">
-          <li><span class="icon-badge">📱</span> SMS &amp; mobile access, even offline</li>
-          <li><span class="icon-badge">🩺</span> Qualified, verified healthcare providers</li>
-          <li><span class="icon-badge">🚨</span> One-tap emergency alerts</li>
-          <li><span class="icon-badge">🌍</span> Built for low-resource African communities</li>
+          <li class="hero-bullet" data-bullet-action="focus-login" tabindex="0" role="button"><span class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><line x1="10" y1="18" x2="14" y2="18"/></svg></span> <span data-i18n="bullet_sms">SMS &amp; mobile access, even offline</span></li>
+          <li class="hero-bullet" data-bullet-action="show-providers" tabindex="0" role="button"><span class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v4M6 5h4M4 12a8 8 0 0 0 16 0V9a2 2 0 0 0-2-2h-1a2 2 0 0 0-2 2v1a3 3 0 0 1-6 0V9a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2z"/><circle cx="19" cy="17" r="2"/></svg></span> <span data-i18n="bullet_providers">Qualified, verified healthcare providers</span></li>
+          <li class="hero-bullet" data-bullet-action="focus-login" tabindex="0" role="button"><span class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span> <span data-i18n="bullet_emergency">One-tap emergency alerts</span></li>
+          <li class="hero-bullet" data-bullet-action="focus-login" tabindex="0" role="button"><span class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg></span> <span data-i18n="bullet_communities">Built for low-resource African communities</span></li>
         </ul>
       </div>
 
+      <div class="modal-overlay" id="providers-preview-modal">
+        <div class="modal">
+          <h1>Verified healthcare providers</h1>
+          <div id="providers-preview-list"><p class="empty-state">Loading...</p></div>
+          <div class="modal-actions">
+            <button type="button" class="secondary" id="providers-preview-close">Close</button>
+          </div>
+        </div>
+      </div>
+
       <div class="card">
-        <h1>Log in to your account</h1>
+        <h1 data-i18n="login_heading">Log in to your account</h1>
         <div id="message" class="message"></div>
         <form onsubmit="handleLogin(event)">
           <div class="field">
-            <label for="phone_number">Phone number</label>
+            <label for="phone_number" data-i18n="phone_number">Phone number</label>
             <input type="tel" id="phone_number" name="phone_number" required />
           </div>
           <div class="field">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required />
+            <label for="password" data-i18n="password">Password</label>
+            <div class="password-wrap">
+              <input type="password" id="password" name="password" required />
+              <button type="button" class="password-toggle" data-target="password" aria-label="Show password">
+                <svg class="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg class="icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a20.3 20.3 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a20.3 20.3 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              </button>
+            </div>
           </div>
-          <button type="submit" class="primary">Log in</button>
+          <button type="submit" class="primary" data-i18n="log_in_link">Log in</button>
         </form>
         <div class="alt-link">
-          Don't have an account? <a href="register.html">Register here</a>
+          <span data-i18n="no_account">Don't have an account?</span> <a href="register.html" data-i18n="register_here">Register here</a>
         </div>
         <div class="alt-link" style="margin-top: 0.5rem; font-size: 0.8rem;">
           <a href="provider-login.html">Healthcare provider</a> ·

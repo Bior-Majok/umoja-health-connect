@@ -16,23 +16,23 @@
         <option value="sw">SW</option>
         <option value="ar">AR</option>
       </select>
-      <button id="logout-btn">Log out</button>
+      <button id="logout-btn" data-i18n="logout">Log out</button>
     </nav>
   </header>
 
   <main>
     <div class="card wide">
       <div class="tabs">
-        <a href="dashboard.html">Profile</a>
-        <a href="appointments.html" class="active">Appointments</a>
-        <a href="records.html">Medical Records</a>
-        <a href="symptom-report.html">Report Symptoms</a>
-        <a href="health-education.html">Health Education</a>
+        <a href="dashboard.html" data-i18n="profile">Profile</a>
+        <a href="appointments.html" class="active" data-i18n="appointments">Appointments</a>
+        <a href="records.html" data-i18n="medical_records">Medical Records</a>
+        <a href="symptom-report.html" data-i18n="report_symptoms">Report Symptoms</a>
+        <a href="health-education.html" data-i18n="health_education">Health Education</a>
       </div>
 
       <div class="section-header">
-        <h1>Your appointments</h1>
-        <button class="secondary" id="new-appointment-btn">+ New appointment</button>
+        <h1 data-i18n="your_appointments">Your appointments</h1>
+        <button class="secondary" id="new-appointment-btn" data-i18n="new_appointment">+ New appointment</button>
       </div>
 
       <div id="appointments-list"></div>
@@ -41,30 +41,36 @@
 
   <div class="modal-overlay" id="appointment-modal">
     <div class="modal">
-      <h1>Book an appointment</h1>
+      <h1 data-i18n="book_appointment_heading">Book an appointment</h1>
       <div id="appointment-message" class="message"></div>
       <form id="appointment-form">
         <div class="field">
-          <label for="provider_id">Provider</label>
+          <label for="provider_id" data-i18n="provider_field">Provider</label>
           <select id="provider_id" name="provider_id" required>
             <option value="" disabled selected>Loading verified providers...</option>
           </select>
         </div>
         <div class="field">
-          <label for="clinic_name">Clinic</label>
+          <label for="known_facility">Choose a known facility (optional)</label>
+          <select id="known_facility">
+            <option value="" selected>Loading facilities...</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="clinic_name" data-i18n="clinic">Clinic</label>
           <input type="text" id="clinic_name" name="clinic_name" required />
         </div>
         <div class="field">
-          <label for="scheduled_at">Date &amp; time</label>
+          <label for="scheduled_at" data-i18n="date_time">Date &amp; time</label>
           <input type="datetime-local" id="scheduled_at" name="scheduled_at" required />
         </div>
         <div class="field">
-          <label for="notes">Notes (optional)</label>
+          <label for="notes" data-i18n="notes">Notes (optional)</label>
           <input type="text" id="notes" name="notes" />
         </div>
         <div class="modal-actions">
-          <button type="button" class="secondary" id="appointment-modal-cancel">Cancel</button>
-          <button type="submit" class="primary">Book appointment</button>
+          <button type="button" class="secondary" id="appointment-modal-cancel" data-i18n="cancel">Cancel</button>
+          <button type="submit" class="primary" data-i18n="book_appointment_btn">Book appointment</button>
         </div>
       </form>
     </div>

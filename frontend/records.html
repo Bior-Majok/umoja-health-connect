@@ -16,23 +16,23 @@
         <option value="sw">SW</option>
         <option value="ar">AR</option>
       </select>
-      <button id="logout-btn">Log out</button>
+      <button id="logout-btn" data-i18n="logout">Log out</button>
     </nav>
   </header>
 
   <main>
     <div class="card wide">
       <div class="tabs">
-        <a href="dashboard.html">Profile</a>
-        <a href="appointments.html">Appointments</a>
-        <a href="records.html" class="active">Medical Records</a>
-        <a href="symptom-report.html">Report Symptoms</a>
-        <a href="health-education.html">Health Education</a>
+        <a href="dashboard.html" data-i18n="profile">Profile</a>
+        <a href="appointments.html" data-i18n="appointments">Appointments</a>
+        <a href="records.html" class="active" data-i18n="medical_records">Medical Records</a>
+        <a href="symptom-report.html" data-i18n="report_symptoms">Report Symptoms</a>
+        <a href="health-education.html" data-i18n="health_education">Health Education</a>
       </div>
 
       <div class="section-header">
-        <h1>Medical records</h1>
-        <button class="secondary" id="new-record-btn">+ Add record</button>
+        <h1 data-i18n="medical_records">Medical records</h1>
+        <button class="secondary" id="new-record-btn" data-i18n="add_record">+ Add record</button>
       </div>
 
       <div id="records-list"></div>
@@ -41,31 +41,31 @@
 
   <div class="modal-overlay" id="record-modal">
     <div class="modal">
-      <h1>Add a medical record</h1>
+      <h1 data-i18n="add_record_heading">Add a medical record</h1>
       <div id="record-message" class="message"></div>
       <form id="record-form">
         <div class="field">
-          <label for="title">Title</label>
+          <label for="title" data-i18n="title_field">Title</label>
           <input type="text" id="title" name="title" required />
         </div>
         <div class="field">
-          <label for="details">Details (optional)</label>
+          <label for="details" data-i18n="details_optional">Details (optional)</label>
           <input type="text" id="details" name="details" />
         </div>
         <div class="field">
-          <label for="recorded_at">Date recorded</label>
+          <label for="recorded_at" data-i18n="date_recorded">Date recorded</label>
           <input type="datetime-local" id="recorded_at" name="recorded_at" />
         </div>
         <div class="field">
-          <label for="status">Status</label>
+          <label for="status" data-i18n="status">Status</label>
           <select id="status" name="status">
             <option value="normal">Normal</option>
             <option value="flagged">Flagged</option>
           </select>
         </div>
         <div class="modal-actions">
-          <button type="button" class="secondary" id="record-modal-cancel">Cancel</button>
-          <button type="submit" class="primary">Save record</button>
+          <button type="button" class="secondary" id="record-modal-cancel" data-i18n="cancel">Cancel</button>
+          <button type="submit" class="primary" data-i18n="save_record">Save record</button>
         </div>
       </form>
     </div>

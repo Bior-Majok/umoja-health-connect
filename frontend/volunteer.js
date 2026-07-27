@@ -149,7 +149,7 @@ async function loadVolunteerActivity() {
         <div class="list-item">
           <div>
             <div class="title">${a.condition}</div>
-            <div class="subtitle">${a.location} · ${formatDateTime(a.created_at)}</div>
+            <div class="subtitle">${mapsLink(a.location)} · ${formatDateTime(a.created_at)}</div>
           </div>
           <span class="status-badge ${a.status}">${a.status}</span>
         </div>`

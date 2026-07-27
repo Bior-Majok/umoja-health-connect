@@ -11,7 +11,7 @@ function injectEmergencyControl() {
   btn.id = "emergency-btn";
   btn.type = "button";
   btn.className = "emergency-btn";
-  btn.textContent = "🚨 " + t("emergency");
+  btn.textContent = t("emergency");
   btn.addEventListener("click", openEmergencyModal);
   nav.prepend(btn);
 

@@ -149,9 +149,83 @@ async function loadAdminReports() {
   `;
 }
 
+async function loadFacilitiesForAdmin() {
+  const res = await adminAuthFetch("/api/facilities");
+  if (!res) return;
+  const data = await res.json();
+  const container = document.getElementById("facilities-list");
+  if (!data.facilities.length) {
+    container.innerHTML = '<div class="empty-state">No facilities added yet.</div>';
+    return;
+  }
+  container.innerHTML = data.facilities
+    .map(
+      (f) => `
+      <div class="list-item">
+        <div>
+          <div class="title">${f.name}</div>
+          <div class="subtitle">${f.facility_type} · ${f.region}, ${f.country}${f.phone_number ? " · " + f.phone_number : ""}</div>
+        </div>
+        <button type="button" class="secondary remove-facility-btn" data-id="${f.id}">Remove</button>
+      </div>`
+    )
+    .join("");
+
+  container.querySelectorAll(".remove-facility-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const res = await adminAuthFetch(`/api/facilities/${btn.dataset.id}`, { method: "DELETE" });
+      if (res && res.ok) loadFacilitiesForAdmin();
+    });
+  });
+}
+
+function initFacilityForm() {
+  const newBtn = document.getElementById("new-facility-btn");
+  if (newBtn) newBtn.addEventListener("click", () => openModal("facility-modal"));
+
+  const cancelBtn = document.getElementById("facility-modal-cancel");
+  if (cancelBtn) cancelBtn.addEventListener("click", () => closeModal("facility-modal"));
+
+  const form = document.getElementById("facility-form");
+  if (!form) return;
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const messageEl = document.getElementById("facility-message");
+    const submitBtn = form.querySelector('button[type="submit"]');
+    setButtonLoading(submitBtn, "Saving...");
+    try {
+      const res = await adminAuthFetch("/api/facilities", {
+        method: "POST",
+        body: JSON.stringify({
+          name: form.name.value.trim(),
+          facility_type: form.facility_type.value,
+          country: form.country.value.trim(),
+          region: form.region.value.trim(),
+          phone_number: form.phone_number.value.trim() || undefined,
+        }),
+      });
+      if (!res) return;
+      const data = await res.json();
+      if (!res.ok) {
+        showMessage(messageEl, data.error || "Could not add facility", "error");
+        return;
+      }
+      form.reset();
+      closeModal("facility-modal");
+      loadFacilitiesForAdmin();
+    } catch (err) {
+      showMessage(messageEl, "Could not reach the server.", "error");
+    } finally {
+      resetButtonLoading(submitBtn);
+    }
+  });
+}
+
 function initAdminDashboard() {
   if (!requireAdminSessionOrRedirect()) return;
   attachAdminLogout();
   loadProvidersForAdmin();
   loadAdminReports();
+  loadFacilitiesForAdmin();
+  initFacilityForm();
 }

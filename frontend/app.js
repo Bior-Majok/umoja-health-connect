@@ -133,6 +133,21 @@ function validateField(input) {
   return true;
 }
 
+function initPasswordToggles() {
+  document.querySelectorAll(".password-toggle").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const input = document.getElementById(btn.dataset.target);
+      if (!input) return;
+      const showing = input.type === "text";
+      input.type = showing ? "password" : "text";
+      btn.classList.toggle("showing", !showing);
+      btn.setAttribute("aria-label", showing ? "Show password" : "Hide password");
+    });
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initPasswordToggles);
+
 function attachLiveValidation(form) {
   const inputs = form.querySelectorAll("input[required], input[type=tel], input[type=password], input[type=number]");
   inputs.forEach((input) => {
@@ -284,6 +299,7 @@ async function initDashboard() {
   renderWelcome(session.patient);
   attachLogout();
   loadDashboardStats();
+  initProviderCards();
 
   const dashEmergencyBtn = document.getElementById("dash-emergency-btn");
   if (dashEmergencyBtn) {
@@ -313,15 +329,114 @@ function initNavSession() {
   showExpiredNoticeIfPresent();
 }
 
+async function showProvidersPreview() {
+  openModal("providers-preview-modal");
+  const listEl = document.getElementById("providers-preview-list");
+  listEl.innerHTML = '<p class="empty-state">Loading...</p>';
+  try {
+    const res = await fetch("/api/providers");
+    const data = await res.json();
+    if (!data.providers.length) {
+      listEl.innerHTML = '<p class="empty-state">No verified providers yet — check back soon.</p>';
+      return;
+    }
+    listEl.innerHTML = data.providers
+      .map(
+        (p) => `
+        <div class="list-item">
+          <div>
+            <div class="title">${p.full_name} — ${p.specialization}</div>
+            <div class="subtitle">${p.region}, ${p.country}</div>
+          </div>
+        </div>`
+      )
+      .join("");
+  } catch (err) {
+    listEl.innerHTML = '<p class="empty-state">Could not reach the server.</p>';
+  }
+}
+
+function initProviderCards() {
+  document.querySelectorAll('.provider-card[data-action="show-providers"]').forEach((card) => {
+    card.addEventListener("click", showProvidersPreview);
+    card.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        showProvidersPreview();
+      }
+    });
+  });
+
+  const closeBtn = document.getElementById("providers-preview-close");
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => closeModal("providers-preview-modal"));
+  }
+}
+
+function initHeroBullets() {
+  document.querySelectorAll(".hero-bullet").forEach((bullet) => {
+    const trigger = () => {
+      const action = bullet.dataset.bulletAction;
+      if (action === "show-providers") {
+        showProvidersPreview();
+      } else if (action === "focus-login") {
+        const phoneField = document.getElementById("phone_number");
+        if (phoneField) {
+          phoneField.scrollIntoView({ behavior: "smooth", block: "center" });
+          phoneField.focus();
+        }
+      }
+    };
+    bullet.addEventListener("click", trigger);
+    bullet.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        trigger();
+      }
+    });
+  });
+
+  const closeBtn = document.getElementById("providers-preview-close");
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => closeModal("providers-preview-modal"));
+  }
+}
+
 function initLoginPage() {
   initNavSession();
   attachLiveValidation(document.querySelector("form"));
+  initHeroBullets();
 }
 
 function initRegisterPage() {
   initNavSession();
   attachLiveValidation(document.querySelector("form"));
 }
+
+function initTermsModal() {
+  const viewTermsLink = document.getElementById("view-terms-link");
+  const acceptTermsBtn = document.getElementById("terms-modal-accept");
+  const closeTermsBtn = document.getElementById("terms-modal-close");
+  const acceptCheckbox = document.getElementById("accept_terms");
+
+  if (viewTermsLink) {
+    viewTermsLink.addEventListener("click", (event) => {
+      event.preventDefault();
+      openModal("terms-modal");
+    });
+  }
+  if (closeTermsBtn) {
+    closeTermsBtn.addEventListener("click", () => closeModal("terms-modal"));
+  }
+  if (acceptTermsBtn) {
+    acceptTermsBtn.addEventListener("click", () => {
+      if (acceptCheckbox) acceptCheckbox.checked = true;
+      closeModal("terms-modal");
+    });
+  }
+}
+
+document.addEventListener("DOMContentLoaded", initTermsModal);
 
 function attachLogout() {
   const btn = document.getElementById("logout-btn");
@@ -362,6 +477,11 @@ function openModal(modalId) {
 
 function closeModal(modalId) {
   document.getElementById(modalId).classList.remove("open");
+}
+
+function mapsLink(location) {
+  const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+  return `<a href="${url}" target="_blank" rel="noopener">📍 ${location}</a>`;
 }
 
 function formatDateTime(iso) {
@@ -427,11 +547,35 @@ async function loadProviderOptions() {
   }
 }
 
+async function loadFacilityOptions() {
+  const select = document.getElementById("known_facility");
+  if (!select) return;
+  try {
+    const res = await fetch("/api/facilities");
+    const data = await res.json();
+    if (!data.facilities.length) {
+      select.innerHTML = '<option value="" selected>No facilities added by admin yet — type below</option>';
+      return;
+    }
+    select.innerHTML =
+      '<option value="" selected>— Select a facility, or type below —</option>' +
+      data.facilities
+        .map((f) => `<option value="${f.name}">${f.name} (${f.facility_type}, ${f.region})</option>`)
+        .join("");
+    select.addEventListener("change", () => {
+      if (select.value) document.getElementById("clinic_name").value = select.value;
+    });
+  } catch (err) {
+    select.innerHTML = '<option value="" selected>Could not load facilities — type below</option>';
+  }
+}
+
 function initAppointments() {
   if (!requireSessionOrRedirect()) return;
   attachLogout();
   loadAppointments();
   loadProviderOptions();
+  loadFacilityOptions();
 
   const newBtn = document.getElementById("new-appointment-btn");
   if (newBtn) {

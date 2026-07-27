@@ -16,30 +16,30 @@
         <option value="sw">SW</option>
         <option value="ar">AR</option>
       </select>
-      <button id="logout-btn">Log out</button>
+      <button id="logout-btn" data-i18n="logout">Log out</button>
     </nav>
   </header>
 
   <main>
     <div class="card">
-      <h1>Edit your profile</h1>
+      <h1 data-i18n="edit_profile">Edit your profile</h1>
       <div id="message" class="message"></div>
       <form id="edit-profile-form">
         <div class="field">
-          <label for="full_name">Full name</label>
+          <label for="full_name" data-i18n="full_name">Full name</label>
           <input type="text" id="full_name" name="full_name" required />
         </div>
         <div class="field">
-          <label for="phone_number">Phone number</label>
+          <label for="phone_number" data-i18n="phone_number">Phone number</label>
           <input type="tel" id="phone_number" name="phone_number" required />
         </div>
         <div class="row">
           <div class="field">
-            <label for="age">Age</label>
+            <label for="age" data-i18n="age">Age</label>
             <input type="number" id="age" name="age" min="0" max="120" required />
           </div>
           <div class="field">
-            <label for="gender">Gender</label>
+            <label for="gender" data-i18n="gender">Gender</label>
             <select id="gender" name="gender" required>
               <option value="Female">Female</option>
               <option value="Male">Male</option>
@@ -49,22 +49,22 @@
         </div>
         <div class="row">
           <div class="field">
-            <label for="country">Country</label>
+            <label for="country" data-i18n="country">Country</label>
             <input type="text" id="country" name="country" required />
           </div>
           <div class="field">
-            <label for="region">Region</label>
+            <label for="region" data-i18n="region">Region</label>
             <input type="text" id="region" name="region" required />
           </div>
         </div>
         <div class="field">
-          <label for="family_contact_phone">Family contact phone (optional)</label>
+          <label for="family_contact_phone" data-i18n="family_contact_optional">Family contact phone (optional)</label>
           <input type="tel" id="family_contact_phone" name="family_contact_phone" />
         </div>
-        <button type="submit" class="primary">Save changes</button>
+        <button type="submit" class="primary" data-i18n="save_changes">Save changes</button>
       </form>
       <div class="alt-link">
-        <a href="dashboard.html">Cancel and go back</a>
+        <a href="dashboard.html" data-i18n="cancel_and_back">Cancel and go back</a>
       </div>
     </div>
   </main>

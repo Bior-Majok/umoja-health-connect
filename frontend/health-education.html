@@ -16,23 +16,23 @@
         <option value="sw">SW</option>
         <option value="ar">AR</option>
       </select>
-      <button id="logout-btn">Log out</button>
+      <button id="logout-btn" data-i18n="logout">Log out</button>
     </nav>
   </header>
 
   <main>
     <div class="card wide">
       <div class="tabs">
-        <a href="dashboard.html">Profile</a>
-        <a href="appointments.html">Appointments</a>
-        <a href="records.html">Medical Records</a>
-        <a href="symptom-report.html">Report Symptoms</a>
-        <a href="health-education.html" class="active">Health Education</a>
+        <a href="dashboard.html" data-i18n="profile">Profile</a>
+        <a href="appointments.html" data-i18n="appointments">Appointments</a>
+        <a href="records.html" data-i18n="medical_records">Medical Records</a>
+        <a href="symptom-report.html" data-i18n="report_symptoms">Report Symptoms</a>
+        <a href="health-education.html" class="active" data-i18n="health_education">Health Education</a>
       </div>
 
       <div class="section-header">
-        <h1>Health education library</h1>
-        <button class="secondary" id="download-offline-btn">Download for offline</button>
+        <h1 data-i18n="health_ed_heading">Health education library</h1>
+        <button class="secondary" id="download-offline-btn" data-i18n="download_offline">Download for offline</button>
       </div>
       <div id="offline-message" class="message"></div>
 
@@ -45,7 +45,7 @@
       <h1 id="article-title"></h1>
       <p id="article-body" style="white-space: pre-wrap;"></p>
       <div class="modal-actions">
-        <button type="button" class="secondary" id="article-modal-close">Close</button>
+        <button type="button" class="secondary" id="article-modal-close" data-i18n="cancel">Close</button>
       </div>
     </div>
   </div>

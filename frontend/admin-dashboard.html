@@ -20,10 +20,56 @@
       <p style="color: var(--muted); font-size: 0.85rem;">Verify new providers before they can accept consultations, or suspend an existing one.</p>
       <div id="providers-list"></div>
 
+      <div class="section-header" style="margin-top: 2rem;">
+        <h1>Health facilities</h1>
+        <button class="secondary" id="new-facility-btn">+ Add facility</button>
+      </div>
+      <p style="color: var(--muted); font-size: 0.85rem;">Clinics, hospitals, and pharmacies patients can select when booking an appointment.</p>
+      <div id="facilities-list"></div>
+
       <h1 style="margin-top: 2rem;">Platform reports</h1>
       <div id="reports-summary"></div>
     </div>
   </main>
+
+  <div class="modal-overlay" id="facility-modal">
+    <div class="modal">
+      <h1>Add a health facility</h1>
+      <div id="facility-message" class="message"></div>
+      <form id="facility-form">
+        <div class="field">
+          <label for="facility_name">Name</label>
+          <input type="text" id="facility_name" name="name" required />
+        </div>
+        <div class="field">
+          <label for="facility_type">Type</label>
+          <select id="facility_type" name="facility_type">
+            <option value="clinic">Clinic</option>
+            <option value="hospital">Hospital</option>
+            <option value="pharmacy">Pharmacy</option>
+          </select>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="facility_country">Country</label>
+            <input type="text" id="facility_country" name="country" required />
+          </div>
+          <div class="field">
+            <label for="facility_region">Region</label>
+            <input type="text" id="facility_region" name="region" required />
+          </div>
+        </div>
+        <div class="field">
+          <label for="facility_phone">Phone number (optional)</label>
+          <input type="tel" id="facility_phone" name="phone_number" />
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="secondary" id="facility-modal-cancel">Cancel</button>
+          <button type="submit" class="primary" style="width:auto;">Add facility</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <script src="app.js"></script>
   <script src="admin.js"></script>

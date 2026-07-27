@@ -1,8 +1,12 @@
 // Minimal offline support (FR6.2 / NFR08): cache the app shell so previously
 // visited pages keep working without a connection, and cache health-education
 // API responses so already-viewed content stays available offline.
-const SHELL_CACHE = 'umoja-shell-v1';
-const API_CACHE = 'umoja-api-v1';
+//
+// Network-first, cache-as-fallback: always prefer the live server so edits show
+// up immediately; only fall back to the cached copy when the network request
+// actually fails (i.e. genuinely offline).
+const SHELL_CACHE = 'umoja-shell-v2';
+const API_CACHE = 'umoja-api-v2';
 
 const SHELL_ASSETS = [
   '/', '/style.css', '/app.js', '/i18n.js', '/emergency.js',
@@ -26,6 +30,16 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+function networkFirst(request, cacheName) {
+  return fetch(request)
+    .then((res) => {
+      const clone = res.clone();
+      caches.open(cacheName).then((cache) => cache.put(request, clone));
+      return res;
+    })
+    .catch(() => caches.match(request));
+}
+
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET') return;
@@ -33,21 +47,11 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url);
 
   if (url.pathname.startsWith('/api/health-education')) {
-    event.respondWith(
-      fetch(request)
-        .then((res) => {
-          const clone = res.clone();
-          caches.open(API_CACHE).then((cache) => cache.put(request, clone));
-          return res;
-        })
-        .catch(() => caches.match(request))
-    );
+    event.respondWith(networkFirst(request, API_CACHE));
     return;
   }
 
   if (url.origin === self.location.origin && !url.pathname.startsWith('/api/')) {
-    event.respondWith(
-      caches.match(request).then((cached) => cached || fetch(request))
-    );
+    event.respondWith(networkFirst(request, SHELL_CACHE));
   }
 });
