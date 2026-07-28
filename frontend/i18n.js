@@ -22,6 +22,7 @@ async function loadLabels() {
     _labels = {};
   }
   applyLabels();
+  document.dispatchEvent(new CustomEvent("i18n:changed"));
 }
 
 function t(key) {

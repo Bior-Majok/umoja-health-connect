@@ -329,40 +329,97 @@ function initNavSession() {
   showExpiredNoticeIfPresent();
 }
 
-async function showProvidersPreview() {
+let allShowcaseProviders = [];
+let activePreviewCategory = null;
+
+const CATEGORY_RULES = [
+  { match: /pharma/i, id: "pharmacy_team", photo: "images/pharmacist.jpg" },
+  { match: /nurse/i, id: "nursing_team", photo: "images/doctor-tablet.jpg" },
+  { match: /child|pediatric|paediatric/i, id: "pediatric_team", photo: "images/doctor-child.jpg" },
+  { match: /general medicine|doctor|physician/i, id: "consultation_team", photo: "images/doctor-consult.jpg" },
+];
+
+function categoryForSpecialization(specialization) {
+  const spec = (specialization || "").trim();
+  const rule = CATEGORY_RULES.find((r) => r.match.test(spec));
+  if (rule) return { key: rule.id, labelKey: rule.id, photo: rule.photo };
+  const key = spec ? `spec:${spec.toLowerCase()}` : "care_team_generic";
+  return { key, labelKey: spec ? null : "care_team_generic", rawSpec: spec, photo: "images/doctor-consult.jpg" };
+}
+
+function categoryLabel(group) {
+  if (group.labelKey) return t(group.labelKey);
+  return `${group.rawSpec} ${t("team_word")}`;
+}
+
+function groupProvidersByCategory(providers) {
+  const groups = new Map();
+  groups.set("pharmacy_team", { labelKey: "pharmacy_team", photo: "images/pharmacist.jpg", members: [] });
+  providers.forEach((p) => {
+    const { key, labelKey, photo, rawSpec } = categoryForSpecialization(p.specialization);
+    if (!groups.has(key)) {
+      groups.set(key, { labelKey, rawSpec, photo, members: [] });
+    }
+    groups.get(key).members.push(p);
+  });
+  return groups;
+}
+
+function renderProviderList(providers) {
+  if (!providers.length) {
+    return `<p class="empty-state">${t("no_verified_providers")}</p>`;
+  }
+  return providers
+    .map(
+      (p) => `
+      <div class="list-item">
+        <div>
+          <div class="title">${p.full_name} — ${p.specialization}</div>
+          <div class="subtitle">${p.region}, ${p.country}</div>
+        </div>
+      </div>`
+    )
+    .join("");
+}
+
+async function ensureShowcaseProvidersLoaded() {
+  if (allShowcaseProviders.length) return allShowcaseProviders;
+  const res = await fetch("/api/providers");
+  const data = await res.json();
+  allShowcaseProviders = data.providers || [];
+  return allShowcaseProviders;
+}
+
+async function showProvidersPreview(categoryKey) {
+  activePreviewCategory = categoryKey || null;
   openModal("providers-preview-modal");
   const listEl = document.getElementById("providers-preview-list");
-  listEl.innerHTML = '<p class="empty-state">Loading...</p>';
+  const titleEl = document.querySelector("#providers-preview-modal h1");
+  listEl.innerHTML = `<p class="empty-state">${t("loading")}</p>`;
   try {
-    const res = await fetch("/api/providers");
-    const data = await res.json();
-    if (!data.providers.length) {
-      listEl.innerHTML = '<p class="empty-state">No verified providers yet — check back soon.</p>';
-      return;
+    const providers = await ensureShowcaseProvidersLoaded();
+    if (categoryKey) {
+      const groups = groupProvidersByCategory(providers);
+      const group = groups.get(categoryKey);
+      if (titleEl) titleEl.textContent = group ? categoryLabel(group) : categoryKey;
+      listEl.innerHTML = renderProviderList(group ? group.members : []);
+    } else {
+      if (titleEl) titleEl.textContent = t("verified_providers_title");
+      listEl.innerHTML = renderProviderList(providers);
     }
-    listEl.innerHTML = data.providers
-      .map(
-        (p) => `
-        <div class="list-item">
-          <div>
-            <div class="title">${p.full_name} — ${p.specialization}</div>
-            <div class="subtitle">${p.region}, ${p.country}</div>
-          </div>
-        </div>`
-      )
-      .join("");
   } catch (err) {
-    listEl.innerHTML = '<p class="empty-state">Could not reach the server.</p>';
+    listEl.innerHTML = `<p class="empty-state">${t("could_not_reach_server")}</p>`;
   }
 }
 
-function initProviderCards() {
-  document.querySelectorAll('.provider-card[data-action="show-providers"]').forEach((card) => {
-    card.addEventListener("click", showProvidersPreview);
+function wireProviderCardClicks() {
+  document.querySelectorAll(".provider-card[data-category]").forEach((card) => {
+    const trigger = () => showProvidersPreview(card.dataset.category);
+    card.addEventListener("click", trigger);
     card.addEventListener("keydown", (event) => {
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
-        showProvidersPreview();
+        trigger();
       }
     });
   });
@@ -371,6 +428,46 @@ function initProviderCards() {
   if (closeBtn) {
     closeBtn.addEventListener("click", () => closeModal("providers-preview-modal"));
   }
+}
+
+async function loadProvidersShowcase() {
+  const grid = document.getElementById("providers-showcase-grid");
+  if (!grid) return;
+  try {
+    const providers = await ensureShowcaseProvidersLoaded();
+    if (!providers.length) {
+      grid.innerHTML = `<p class="empty-state">${t("no_verified_providers")}</p>`;
+      return;
+    }
+    const groups = groupProvidersByCategory(providers);
+    grid.innerHTML = [...groups.entries()]
+      .map(([key, group]) => {
+        const label = categoryLabel(group);
+        const memberWord = group.members.length === 1 ? t("member_label") : t("members_label");
+        return `
+        <div class="provider-card" data-category="${key}" tabindex="0" role="button">
+          <img src="${group.photo}" alt="${label}" />
+          <div class="provider-card-body">
+            <div class="provider-name">${label}</div>
+            <div class="provider-role">${group.members.length} ${memberWord}</div>
+          </div>
+        </div>`;
+      })
+      .join("");
+    wireProviderCardClicks();
+  } catch (err) {
+    grid.innerHTML = `<p class="empty-state">${t("could_not_reach_server")}</p>`;
+  }
+}
+
+function initProviderCards() {
+  loadProvidersShowcase();
+  document.addEventListener("i18n:changed", () => {
+    loadProvidersShowcase();
+    if (document.getElementById("providers-preview-modal")?.classList.contains("open")) {
+      showProvidersPreview(activePreviewCategory);
+    }
+  });
 }
 
 function initHeroBullets() {
