@@ -10,24 +10,31 @@
   <header>
     <div class="brand">Umoja Health Connect — Providers</div>
     <nav>
-      <button id="logout-btn">Log out</button>
+      <select id="language-select" class="lang-select">
+        <option value="en">EN</option>
+        <option value="fr">FR</option>
+        <option value="sw">SW</option>
+        <option value="ar">AR</option>
+      </select>
+      <button id="logout-btn" data-i18n="logout">Log out</button>
     </nav>
   </header>
 
   <main>
     <div class="card wide">
       <div class="tabs">
-        <a href="provider-dashboard.html">Consultations</a>
-        <a href="provider-appointments.html" class="active">Appointments</a>
-        <a href="provider-alerts.html">Emergency Alerts</a>
+        <a href="provider-dashboard.html" data-i18n="consultations_nav">Consultations</a>
+        <a href="provider-appointments.html" class="active" data-i18n="appointments">Appointments</a>
+        <a href="provider-alerts.html" data-i18n="emergency_alerts_nav">Emergency Alerts</a>
       </div>
 
-      <h1>Your appointments</h1>
+      <h1 data-i18n="your_appointments">Your appointments</h1>
       <div id="provider-appointments-list"></div>
     </div>
   </main>
 
   <script src="app.js"></script>
+  <script src="i18n.js"></script>
   <script src="provider.js"></script>
 </body>
 </html>

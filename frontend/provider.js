@@ -122,7 +122,7 @@ async function loadProviderConsultations() {
   const data = await res.json();
   const container = document.getElementById("consultations-list");
   if (!data.consultations.length) {
-    container.innerHTML = '<div class="empty-state">No consultations assigned yet.</div>';
+    container.innerHTML = `<div class="empty-state">${t("no_consultations_yet")}</div>`;
     return;
   }
   container.innerHTML = data.consultations
@@ -131,12 +131,12 @@ async function loadProviderConsultations() {
       <div class="list-item">
         <div>
           <div class="title">${c.symptoms}</div>
-          <div class="subtitle">Patient ${c.patient_id} · ${formatDateTime(c.created_at)}</div>
+          <div class="subtitle">${t("patient_label")} ${c.patient_id} · ${formatDateTime(c.created_at)}</div>
         </div>
         <div class="list-item-meta">
           <span class="status-badge ${c.urgency === "critical" ? "critical" : c.status}">${c.urgency === "critical" ? "critical" : c.status}</span>
-          <button type="button" class="secondary records-btn" data-patient-id="${c.patient_id}">View records</button>
-          ${c.status !== "closed" ? `<button type="button" class="secondary respond-btn" data-id="${c.id}">Respond</button>` : ""}
+          <button type="button" class="secondary records-btn" data-patient-id="${c.patient_id}">${t("view_records_btn")}</button>
+          ${c.status !== "closed" ? `<button type="button" class="secondary respond-btn" data-id="${c.id}">${t("respond_btn")}</button>` : ""}
         </div>
       </div>`
     )
@@ -158,18 +158,18 @@ async function showPatientRecords(patientId) {
   openModal("patient-records-modal");
   const titleEl = document.getElementById("patient-records-title");
   const listEl = document.getElementById("patient-records-list");
-  titleEl.textContent = "Patient records";
-  listEl.innerHTML = '<p class="empty-state">Loading...</p>';
+  titleEl.textContent = t("patient_records_title");
+  listEl.innerHTML = `<p class="empty-state">${t("loading")}</p>`;
   const res = await providerAuthFetch(`/api/records/patient/${patientId}`);
   if (!res) return;
   const data = await res.json();
   if (!res.ok) {
-    listEl.innerHTML = `<p class="empty-state">${data.error || "Could not load records."}</p>`;
+    listEl.innerHTML = `<p class="empty-state">${data.error || t("could_not_load_records")}</p>`;
     return;
   }
-  titleEl.textContent = `Records — ${data.patient.full_name}`;
+  titleEl.textContent = `${t("records_heading_prefix")} ${data.patient.full_name}`;
   if (!data.records.length) {
-    listEl.innerHTML = '<p class="empty-state">No records on file for this patient yet.</p>';
+    listEl.innerHTML = `<p class="empty-state">${t("no_records_on_file")}</p>`;
     return;
   }
   listEl.innerHTML = data.records
@@ -239,7 +239,7 @@ async function loadProviderAppointments() {
   const data = await res.json();
   const container = document.getElementById("provider-appointments-list");
   if (!data.appointments.length) {
-    container.innerHTML = '<div class="empty-state">No appointments booked yet.</div>';
+    container.innerHTML = `<div class="empty-state">${t("no_appointments_yet")}</div>`;
     return;
   }
   container.innerHTML = data.appointments
@@ -252,7 +252,7 @@ async function loadProviderAppointments() {
         </div>
         <div class="list-item-meta">
           <span class="status-badge ${a.status}">${a.status}</span>
-          ${a.status === "upcoming" ? `<button type="button" class="secondary complete-btn" data-id="${a.id}">Mark completed</button>` : ""}
+          ${a.status === "upcoming" ? `<button type="button" class="secondary complete-btn" data-id="${a.id}">${t("mark_completed_btn")}</button>` : ""}
         </div>
       </div>`
     )
@@ -278,7 +278,7 @@ async function loadProviderAlerts() {
   const data = await res.json();
   const container = document.getElementById("alerts-list");
   if (!data.emergency_alerts.length) {
-    container.innerHTML = '<div class="empty-state">No emergency alerts in your region.</div>';
+    container.innerHTML = `<div class="empty-state">${t("no_alerts_in_region")}</div>`;
     return;
   }
   container.innerHTML = data.emergency_alerts
@@ -291,7 +291,7 @@ async function loadProviderAlerts() {
         </div>
         <div class="list-item-meta">
           <span class="status-badge ${a.status}">${a.status}</span>
-          ${a.status !== "resolved" ? `<button type="button" class="secondary resolve-btn" data-id="${a.id}">Resolve</button>` : ""}
+          ${a.status !== "resolved" ? `<button type="button" class="secondary resolve-btn" data-id="${a.id}">${t("resolve_btn")}</button>` : ""}
         </div>
       </div>`
     )

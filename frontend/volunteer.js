@@ -130,13 +130,13 @@ async function loadVolunteerActivity() {
         <div class="list-item">
           <div>
             <div class="title">${c.symptoms}</div>
-            <div class="subtitle">Patient ${c.patient_id} · ${formatDateTime(c.created_at)}</div>
+            <div class="subtitle">${t("patient_label")} ${c.patient_id} · ${formatDateTime(c.created_at)}</div>
           </div>
           <span class="status-badge ${c.status}">${c.status}</span>
         </div>`
           )
           .join("")
-      : '<div class="empty-state">No consultations submitted yet.</div>';
+      : `<div class="empty-state">${t("no_consultations_submitted")}</div>`;
   }
 
   if (alertRes) {
@@ -155,7 +155,7 @@ async function loadVolunteerActivity() {
         </div>`
           )
           .join("")
-      : '<div class="empty-state">No emergency alerts triggered yet.</div>';
+      : `<div class="empty-state">${t("no_alerts_triggered")}</div>`;
   }
 }
 

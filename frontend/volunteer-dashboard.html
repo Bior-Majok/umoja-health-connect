@@ -10,54 +10,61 @@
   <header>
     <div class="brand">Umoja Health Connect — Volunteers</div>
     <nav>
-      <button id="logout-btn">Log out</button>
+      <select id="language-select" class="lang-select">
+        <option value="en">EN</option>
+        <option value="fr">FR</option>
+        <option value="sw">SW</option>
+        <option value="ar">AR</option>
+      </select>
+      <button id="logout-btn" data-i18n="logout">Log out</button>
     </nav>
   </header>
 
   <main>
     <div class="card wide">
-      <h1>Submit a consultation for a patient</h1>
-      <p style="color: var(--muted); font-size: 0.85rem;">The patient must already be registered on Umoja Health Connect.</p>
+      <h1 data-i18n="submit_consultation_heading">Submit a consultation for a patient</h1>
+      <p style="color: var(--muted); font-size: 0.85rem;" data-i18n="volunteer_patient_registered_note">The patient must already be registered on Umoja Health Connect.</p>
       <div id="consultation-message" class="message"></div>
       <form id="volunteer-consultation-form">
         <div class="row">
           <div class="field">
-            <label for="patient_phone_number">Patient phone number</label>
+            <label for="patient_phone_number" data-i18n="patient_phone_label">Patient phone number</label>
             <input type="tel" id="patient_phone_number" name="patient_phone_number" required />
           </div>
         </div>
         <div class="field">
-          <label for="symptoms">Symptoms</label>
+          <label for="symptoms" data-i18n="symptoms">Symptoms</label>
           <input type="text" id="symptoms" name="symptoms" required />
         </div>
-        <button type="submit" class="primary">Submit consultation</button>
+        <button type="submit" class="primary" data-i18n="submit_consultation_btn">Submit consultation</button>
       </form>
       <div id="volunteer-consultations-list" style="margin-top: 1rem;"></div>
     </div>
 
     <div class="card wide" style="margin-top: 1.5rem;">
-      <h1>Trigger an emergency alert for a patient</h1>
+      <h1 data-i18n="trigger_alert_heading">Trigger an emergency alert for a patient</h1>
       <div id="alert-message" class="message"></div>
       <form id="volunteer-alert-form">
         <div class="field">
-          <label for="alert_patient_phone_number">Patient phone number</label>
+          <label for="alert_patient_phone_number" data-i18n="patient_phone_label">Patient phone number</label>
           <input type="tel" id="alert_patient_phone_number" name="patient_phone_number" required />
         </div>
         <div class="field">
-          <label for="location">Location</label>
+          <label for="location" data-i18n="location_label">Location</label>
           <input type="text" id="location" name="location" required />
         </div>
         <div class="field">
-          <label for="condition">Condition</label>
+          <label for="condition" data-i18n="condition_label">Condition</label>
           <input type="text" id="condition" name="condition" required />
         </div>
-        <button type="submit" class="primary emergency-submit">Send emergency alert</button>
+        <button type="submit" class="primary emergency-submit" data-i18n="send_emergency_alert_btn">Send emergency alert</button>
       </form>
       <div id="volunteer-alerts-list" style="margin-top: 1rem;"></div>
     </div>
   </main>
 
   <script src="app.js"></script>
+  <script src="i18n.js"></script>
   <script src="volunteer.js"></script>
 </body>
 </html>

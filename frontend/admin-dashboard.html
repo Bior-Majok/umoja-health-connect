@@ -10,68 +10,75 @@
   <header>
     <div class="brand">Umoja Health Connect — Admin</div>
     <nav>
-      <button id="logout-btn">Log out</button>
+      <select id="language-select" class="lang-select">
+        <option value="en">EN</option>
+        <option value="fr">FR</option>
+        <option value="sw">SW</option>
+        <option value="ar">AR</option>
+      </select>
+      <button id="logout-btn" data-i18n="logout">Log out</button>
     </nav>
   </header>
 
   <main>
     <div class="card wide">
-      <h1>Healthcare providers</h1>
-      <p style="color: var(--muted); font-size: 0.85rem;">Verify new providers before they can accept consultations, or suspend an existing one.</p>
+      <h1 data-i18n="healthcare_providers_heading">Healthcare providers</h1>
+      <p style="color: var(--muted); font-size: 0.85rem;" data-i18n="verify_providers_note">Verify new providers before they can accept consultations, or suspend an existing one.</p>
       <div id="providers-list"></div>
 
       <div class="section-header" style="margin-top: 2rem;">
-        <h1>Health facilities</h1>
-        <button class="secondary" id="new-facility-btn">+ Add facility</button>
+        <h1 data-i18n="health_facilities_heading">Health facilities</h1>
+        <button class="secondary" id="new-facility-btn" data-i18n="add_facility_btn">+ Add facility</button>
       </div>
-      <p style="color: var(--muted); font-size: 0.85rem;">Clinics, hospitals, and pharmacies patients can select when booking an appointment.</p>
+      <p style="color: var(--muted); font-size: 0.85rem;" data-i18n="facilities_note">Clinics, hospitals, and pharmacies patients can select when booking an appointment.</p>
       <div id="facilities-list"></div>
 
-      <h1 style="margin-top: 2rem;">Platform reports</h1>
+      <h1 style="margin-top: 2rem;" data-i18n="platform_reports_heading">Platform reports</h1>
       <div id="reports-summary"></div>
     </div>
   </main>
 
   <div class="modal-overlay" id="facility-modal">
     <div class="modal">
-      <h1>Add a health facility</h1>
+      <h1 data-i18n="add_health_facility_heading">Add a health facility</h1>
       <div id="facility-message" class="message"></div>
       <form id="facility-form">
         <div class="field">
-          <label for="facility_name">Name</label>
+          <label for="facility_name" data-i18n="facility_name_label">Name</label>
           <input type="text" id="facility_name" name="name" required />
         </div>
         <div class="field">
-          <label for="facility_type">Type</label>
+          <label for="facility_type" data-i18n="facility_type_label">Type</label>
           <select id="facility_type" name="facility_type">
-            <option value="clinic">Clinic</option>
-            <option value="hospital">Hospital</option>
-            <option value="pharmacy">Pharmacy</option>
+            <option value="clinic" data-i18n="facility_type_clinic">Clinic</option>
+            <option value="hospital" data-i18n="facility_type_hospital">Hospital</option>
+            <option value="pharmacy" data-i18n="facility_type_pharmacy">Pharmacy</option>
           </select>
         </div>
         <div class="row">
           <div class="field">
-            <label for="facility_country">Country</label>
+            <label for="facility_country" data-i18n="country">Country</label>
             <input type="text" id="facility_country" name="country" required />
           </div>
           <div class="field">
-            <label for="facility_region">Region</label>
+            <label for="facility_region" data-i18n="region">Region</label>
             <input type="text" id="facility_region" name="region" required />
           </div>
         </div>
         <div class="field">
-          <label for="facility_phone">Phone number (optional)</label>
+          <label for="facility_phone" data-i18n="phone_number_optional">Phone number (optional)</label>
           <input type="tel" id="facility_phone" name="phone_number" />
         </div>
         <div class="modal-actions">
-          <button type="button" class="secondary" id="facility-modal-cancel">Cancel</button>
-          <button type="submit" class="primary" style="width:auto;">Add facility</button>
+          <button type="button" class="secondary" id="facility-modal-cancel" data-i18n="cancel">Cancel</button>
+          <button type="submit" class="primary" style="width:auto;" data-i18n="add_facility_submit">Add facility</button>
         </div>
       </form>
     </div>
   </div>
 
   <script src="app.js"></script>
+  <script src="i18n.js"></script>
   <script src="admin.js"></script>
 </body>
 </html>

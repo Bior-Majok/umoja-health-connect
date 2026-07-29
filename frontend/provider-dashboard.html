@@ -10,42 +10,48 @@
   <header>
     <div class="brand">Umoja Health Connect — Providers</div>
     <nav>
-      <button id="logout-btn">Log out</button>
+      <select id="language-select" class="lang-select">
+        <option value="en">EN</option>
+        <option value="fr">FR</option>
+        <option value="sw">SW</option>
+        <option value="ar">AR</option>
+      </select>
+      <button id="logout-btn" data-i18n="logout">Log out</button>
     </nav>
   </header>
 
   <main>
     <div class="card wide">
       <div class="tabs">
-        <a href="provider-dashboard.html" class="active">Consultations</a>
-        <a href="provider-appointments.html">Appointments</a>
-        <a href="provider-alerts.html">Emergency Alerts</a>
+        <a href="provider-dashboard.html" class="active" data-i18n="consultations_nav">Consultations</a>
+        <a href="provider-appointments.html" data-i18n="appointments">Appointments</a>
+        <a href="provider-alerts.html" data-i18n="emergency_alerts_nav">Emergency Alerts</a>
       </div>
 
-      <h1>Your consultation queue</h1>
+      <h1 data-i18n="consultation_queue_heading">Your consultation queue</h1>
       <div id="consultations-list"></div>
     </div>
   </main>
 
   <div class="modal-overlay" id="respond-modal">
     <div class="modal">
-      <h1>Respond to consultation</h1>
+      <h1 data-i18n="respond_to_consultation_heading">Respond to consultation</h1>
       <div id="respond-message" class="message"></div>
       <form id="respond-form">
         <input type="hidden" id="respond-consultation-id" />
         <div class="field">
-          <label for="response_notes">Response notes</label>
+          <label for="response_notes" data-i18n="response_notes_label">Response notes</label>
           <input type="text" id="response_notes" name="response_notes" required />
         </div>
         <div class="field">
-          <label><input type="checkbox" id="mark_critical" name="mark_critical" /> Escalate as critical (creates an emergency alert)</label>
+          <label><input type="checkbox" id="mark_critical" name="mark_critical" /> <span data-i18n="escalate_critical_label">Escalate as critical (creates an emergency alert)</span></label>
         </div>
         <div class="field">
-          <label><input type="checkbox" id="close_case" name="close_case" /> Close this case</label>
+          <label><input type="checkbox" id="close_case" name="close_case" /> <span data-i18n="close_case_label">Close this case</span></label>
         </div>
         <div class="modal-actions">
-          <button type="button" class="secondary" id="respond-modal-cancel">Cancel</button>
-          <button type="submit" class="primary">Save response</button>
+          <button type="button" class="secondary" id="respond-modal-cancel" data-i18n="cancel">Cancel</button>
+          <button type="submit" class="primary" data-i18n="save_response_btn">Save response</button>
         </div>
       </form>
     </div>
@@ -56,12 +62,13 @@
       <h1 id="patient-records-title">Patient records</h1>
       <div id="patient-records-list"></div>
       <div class="modal-actions">
-        <button type="button" class="secondary" id="patient-records-close">Close</button>
+        <button type="button" class="secondary" id="patient-records-close" data-i18n="close_btn">Close</button>
       </div>
     </div>
   </div>
 
   <script src="app.js"></script>
+  <script src="i18n.js"></script>
   <script src="provider.js"></script>
 </body>
 </html>

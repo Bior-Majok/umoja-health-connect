@@ -89,7 +89,7 @@ async function loadProvidersForAdmin() {
   const data = await res.json();
   const container = document.getElementById("providers-list");
   if (!data.providers.length) {
-    container.innerHTML = '<div class="empty-state">No providers registered yet.</div>';
+    container.innerHTML = `<div class="empty-state">${t("no_providers_registered")}</div>`;
     return;
   }
   container.innerHTML = data.providers
@@ -101,11 +101,11 @@ async function loadProvidersForAdmin() {
           <div class="subtitle">${p.region}, ${p.country} · ${p.phone_number}</div>
         </div>
         <div class="list-item-meta">
-          <span class="status-badge ${p.is_verified ? "completed" : "pending"}">${p.is_verified ? "verified" : "pending"}</span>
+          <span class="status-badge ${p.is_verified ? "completed" : "pending"}">${p.is_verified ? t("verified_status") : t("pending_status")}</span>
           ${
             p.is_verified
-              ? `<button type="button" class="secondary suspend-btn" data-id="${p.provider_id}">Suspend</button>`
-              : `<button type="button" class="secondary verify-btn" data-id="${p.provider_id}">Verify</button>`
+              ? `<button type="button" class="secondary suspend-btn" data-id="${p.provider_id}">${t("suspend_btn")}</button>`
+              : `<button type="button" class="secondary verify-btn" data-id="${p.provider_id}">${t("verify_btn")}</button>`
           }
         </div>
       </div>`
@@ -137,15 +137,15 @@ async function loadAdminReports() {
       .join("");
 
   container.innerHTML = `
-    <h2 style="font-size:1.05rem; margin-bottom:0.5rem;">Verified providers: ${data.verified_providers} · Pending: ${data.pending_providers}</h2>
-    <h3 style="font-size:0.95rem; margin:1rem 0 0.3rem;">Patients by country</h3>
-    ${countRows(data.patients_by_country) || '<div class="empty-state">No data yet.</div>'}
-    <h3 style="font-size:0.95rem; margin:1rem 0 0.3rem;">Providers by region</h3>
-    ${countRows(data.providers_by_region) || '<div class="empty-state">No data yet.</div>'}
-    <h3 style="font-size:0.95rem; margin:1rem 0 0.3rem;">Consultations by status</h3>
-    ${countRows(data.consultations_by_status) || '<div class="empty-state">No data yet.</div>'}
-    <h3 style="font-size:0.95rem; margin:1rem 0 0.3rem;">Emergency alerts by status</h3>
-    ${countRows(data.emergency_alerts_by_status) || '<div class="empty-state">No data yet.</div>'}
+    <h2 style="font-size:1.05rem; margin-bottom:0.5rem;">${t("verified_providers_report_label")}: ${data.verified_providers} · ${t("pending_report_label")}: ${data.pending_providers}</h2>
+    <h3 style="font-size:0.95rem; margin:1rem 0 0.3rem;">${t("patients_by_country_label")}</h3>
+    ${countRows(data.patients_by_country) || `<div class="empty-state">${t("no_data_yet")}</div>`}
+    <h3 style="font-size:0.95rem; margin:1rem 0 0.3rem;">${t("providers_by_region_label")}</h3>
+    ${countRows(data.providers_by_region) || `<div class="empty-state">${t("no_data_yet")}</div>`}
+    <h3 style="font-size:0.95rem; margin:1rem 0 0.3rem;">${t("consultations_by_status_label")}</h3>
+    ${countRows(data.consultations_by_status) || `<div class="empty-state">${t("no_data_yet")}</div>`}
+    <h3 style="font-size:0.95rem; margin:1rem 0 0.3rem;">${t("alerts_by_status_label")}</h3>
+    ${countRows(data.emergency_alerts_by_status) || `<div class="empty-state">${t("no_data_yet")}</div>`}
   `;
 }
 
@@ -155,7 +155,7 @@ async function loadFacilitiesForAdmin() {
   const data = await res.json();
   const container = document.getElementById("facilities-list");
   if (!data.facilities.length) {
-    container.innerHTML = '<div class="empty-state">No facilities added yet.</div>';
+    container.innerHTML = `<div class="empty-state">${t("no_facilities_yet")}</div>`;
     return;
   }
   container.innerHTML = data.facilities
@@ -166,7 +166,7 @@ async function loadFacilitiesForAdmin() {
           <div class="title">${f.name}</div>
           <div class="subtitle">${f.facility_type} · ${f.region}, ${f.country}${f.phone_number ? " · " + f.phone_number : ""}</div>
         </div>
-        <button type="button" class="secondary remove-facility-btn" data-id="${f.id}">Remove</button>
+        <button type="button" class="secondary remove-facility-btn" data-id="${f.id}">${t("remove_btn")}</button>
       </div>`
     )
     .join("");

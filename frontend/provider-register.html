@@ -10,43 +10,49 @@
   <header>
     <div class="brand">Umoja Health Connect — Providers</div>
     <nav>
-      <a href="provider-login.html">Login</a>
+      <select id="language-select" class="lang-select">
+        <option value="en">EN</option>
+        <option value="fr">FR</option>
+        <option value="sw">SW</option>
+        <option value="ar">AR</option>
+      </select>
+      <a href="provider-login.html" data-i18n="login">Login</a>
     </nav>
   </header>
 
   <main>
     <div class="auth-decor" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
     <div class="card">
-      <h1>Register as a healthcare provider</h1>
-      <p style="color: var(--muted); font-size: 0.85rem; margin-top: -0.5rem;">
+      <h1 data-i18n="register_provider_heading">Register as a healthcare provider</h1>
+      <p style="color: var(--muted); font-size: 0.85rem; margin-top: -0.5rem;" data-i18n="provider_verify_note">
         Your account will need to be verified by an administrator before you can log in.
       </p>
       <div id="message" class="message"></div>
       <form onsubmit="handleProviderRegister(event)">
         <div class="field">
-          <label for="full_name">Full name</label>
+          <label for="full_name" data-i18n="full_name">Full name</label>
           <input type="text" id="full_name" name="full_name" required />
         </div>
         <div class="field">
-          <label for="phone_number">Phone number</label>
+          <label for="phone_number" data-i18n="phone_number">Phone number</label>
           <input type="tel" id="phone_number" name="phone_number" required />
         </div>
         <div class="field">
-          <label for="specialization">Specialization</label>
+          <label for="specialization" data-i18n="specialization_label">Specialization</label>
           <input type="text" id="specialization" name="specialization" required />
         </div>
         <div class="row">
           <div class="field">
-            <label for="country">Country</label>
+            <label for="country" data-i18n="country">Country</label>
             <input type="text" id="country" name="country" required />
           </div>
           <div class="field">
-            <label for="region">Region</label>
+            <label for="region" data-i18n="region">Region</label>
             <input type="text" id="region" name="region" required />
           </div>
         </div>
         <div class="field">
-          <label for="password">Password</label>
+          <label for="password" data-i18n="password">Password</label>
           <div class="password-wrap">
             <input type="password" id="password" name="password" minlength="6" required />
             <button type="button" class="password-toggle" data-target="password" aria-label="Show password">
@@ -58,20 +64,20 @@
         <div class="field field-checkbox">
           <label class="checkbox-label">
             <input type="checkbox" id="accept_terms" name="accept_terms" required />
-            <span>I agree to the <a href="#" id="view-terms-link">Provider Terms &amp; Conditions</a></span>
+            <span><span data-i18n="agree_to_provider_terms">I agree to the</span> <a href="#" id="view-terms-link" data-i18n="provider_terms_heading">Provider Terms &amp; Conditions</a></span>
           </label>
         </div>
-        <button type="submit" class="primary">Register</button>
+        <button type="submit" class="primary" data-i18n="register">Register</button>
       </form>
       <div class="alt-link">
-        Already verified? <a href="provider-login.html">Log in</a>
+        <span data-i18n="already_verified">Already verified?</span> <a href="provider-login.html" data-i18n="log_in_link">Log in</a>
       </div>
     </div>
   </main>
 
   <div class="modal-overlay" id="terms-modal">
     <div class="modal">
-      <h1>Provider Terms &amp; Conditions</h1>
+      <h1 data-i18n="provider_terms_heading">Provider Terms &amp; Conditions</h1>
       <div class="terms-body">
         <h2>Verification requirement</h2>
         <p>
@@ -92,13 +98,14 @@
         </p>
       </div>
       <div class="modal-actions">
-        <button type="button" class="secondary" id="terms-modal-close">Close</button>
-        <button type="button" class="primary" id="terms-modal-accept" style="width:auto;">I Accept</button>
+        <button type="button" class="secondary" id="terms-modal-close" data-i18n="close_btn">Close</button>
+        <button type="button" class="primary" id="terms-modal-accept" style="width:auto;" data-i18n="i_accept_btn">I Accept</button>
       </div>
     </div>
   </div>
 
   <script src="app.js"></script>
+  <script src="i18n.js"></script>
   <script src="provider.js"></script>
 </body>
 </html>
