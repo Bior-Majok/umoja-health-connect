@@ -1186,6 +1186,8 @@ button.secondary:hover {
     overflow-x: auto;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
+    -webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent);
+    mask-image: linear-gradient(to right, black calc(100% - 28px), transparent);
   }
 
   .tabs a {
