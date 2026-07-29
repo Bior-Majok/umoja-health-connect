@@ -72,25 +72,40 @@ start receiving consultations and appointments.
 ```bash
 pytest
 ```
-47 tests covering auth (all four roles), consultations, emergency alerts, appointments,
-medical records, health education, and account lockout.
+66 tests covering auth (all four roles), consultations (including symptom-based routing
+and SLA auto-escalation), emergency alerts, appointments, medical records (including
+provider access), health education, inbound SMS commands, and account lockout.
 
 ## 2. Deployment
 
 The Procfile (`web: gunicorn run:app`) is ready for any platform that runs a `Procfile`
 (Render, Railway, Heroku-style hosts). Set the following environment variables in
 production rather than relying on the development defaults in `config.py`:
-- `SECRET_KEY`
-- `JWT_SECRET_KEY`
+
+| Variable | Required | Purpose |
+|---|---|---|
+| `SECRET_KEY` | Yes | Flask session/signing secret |
+| `JWT_SECRET_KEY` | Yes | JWT signing secret |
+| `DATABASE_URL` | No | Postgres connection string (per SRS Software Interfaces). Falls back to local SQLite if unset — fine for a demo/pilot, but set this for a real deployment. |
+| `ENCRYPTION_KEY` | Recommended | Key used to derive the AES-256 key that encrypts personal health data at rest (symptoms, consultation notes, alert conditions, medical record details). Falls back to a fixed dev-only key if unset — **do not leave unset in production**. |
+| `AFRICASTALKING_USERNAME` / `AFRICASTALKING_API_KEY` | No | Enables real outbound SMS delivery. Falls back to a mocked/logged sender if unset. |
+| `SMS_INBOUND_SECRET` | Recommended if using inbound SMS | Shared secret Africa's Talking must echo back on the inbound webhook so it can't be spoofed by an arbitrary POST. |
+
+### Wiring real SMS (outbound + inbound)
+1. Create an Africa's Talking account and set `AFRICASTALKING_USERNAME`/`AFRICASTALKING_API_KEY` (and `AFRICASTALKING_SANDBOX=false` once out of sandbox) — this switches `app/services/notifications.py` from mocked to real delivery.
+2. In the Africa's Talking dashboard, point your SMS number's inbound webhook at `https://<your-domain>/api/sms/inbound?secret=<SMS_INBOUND_SECRET>`. This is what lets patients with no smartphone and no internet text `SYMPTOM <how you feel>` or `EMERGENCY <what's happening>` and get routed through the same consultation/alert flow as the app — see `app/routes/sms.py`.
 
 ## Notes on scope
 
-- **SMS and push notifications are simulated**, not sent through a real carrier — there's
-  no paid Africa's Talking/Firebase account configured. Every notification the SRS
-  requires (emergency alerts, appointment confirmations, consultation escalations) still
-  fires through `app/services/notifications.py` and is logged/recorded (`NotificationLog`
-  table), so the feature is fully demonstrable end-to-end; swapping in real credentials
-  is a small, isolated change in that one file.
 - Non-English health-education/UI content is a best-effort translation, not medically
   vetted — flagged via the `is_verified` field per the SRS's business rule that clinical
   content requires expert review before publishing.
+- The background scheduler (`app/services/scheduler.py`) runs the consultation
+  auto-escalation sweep every 5 minutes and a database backup every 24 hours. On the
+  managed-Postgres path (`DATABASE_URL` set), the backup job just logs that the host's
+  own automated backups apply, rather than reinventing `pg_dump` scheduling.
+- 500,000-concurrent-user scale and multi-region African cloud hosting (both explicit
+  SRS NFRs) are infrastructure claims that depend on the hosting tier chosen, not
+  something the codebase itself can guarantee — the architecture (stateless JWT auth,
+  indexed foreign keys, Postgres-ready config) doesn't block scaling, but this repo
+  hasn't been load-tested at that scale.

@@ -13,6 +13,34 @@ emergency_alerts_bp = Blueprint('emergency_alerts', __name__)
 NEAREST_FACILITY_CONTACT = '+000000000'  # placeholder for a real facility directory lookup
 
 
+def create_emergency_alert_record(patient, condition, location=None, severity='critical', triggered_by_volunteer_id=None):
+    """Shared by the JSON API route and the inbound SMS command handler (FR 3.1) so
+    feature-phone patients trigger the exact same provider/facility notification fan-out."""
+    alert = EmergencyAlert(
+        patient_id=patient.patient_id,
+        triggered_by_volunteer_id=triggered_by_volunteer_id,
+        location=location or f'{patient.region}, {patient.country}',
+        condition=condition,
+        severity=severity,
+    )
+    db.session.add(alert)
+    db.session.commit()
+
+    patient_region = (patient.region or '').strip().lower()
+    providers = HealthcareProvider.query.filter(
+        HealthcareProvider.is_verified.is_(True),
+        db.func.lower(db.func.trim(HealthcareProvider.region)) == patient_region,
+    ).all()
+    for provider in providers:
+        send_push(provider.phone_number, 'EMERGENCY ALERT', f'{patient.full_name} at {alert.location}: {alert.condition}')
+    send_sms(NEAREST_FACILITY_CONTACT, f'Emergency: {patient.full_name} at {alert.location}: {alert.condition}')
+
+    alert.status = 'notified'
+    db.session.commit()
+
+    return alert, providers
+
+
 @emergency_alerts_bp.route('', methods=['POST'])
 @require_role('patient', 'volunteer')
 def trigger_alert():
@@ -35,27 +63,13 @@ def trigger_alert():
             return jsonify({'error': 'No patient found with that phone number'}), 404
         triggered_by_volunteer_id = get_jwt_identity()
 
-    alert = EmergencyAlert(
-        patient_id=patient.patient_id,
-        triggered_by_volunteer_id=triggered_by_volunteer_id,
+    alert, providers = create_emergency_alert_record(
+        patient,
+        data['condition'],
         location=data['location'],
-        condition=data['condition'],
         severity=data.get('severity', 'critical'),
+        triggered_by_volunteer_id=triggered_by_volunteer_id,
     )
-    db.session.add(alert)
-    db.session.commit()
-
-    patient_region = (patient.region or '').strip().lower()
-    providers = HealthcareProvider.query.filter(
-        HealthcareProvider.is_verified.is_(True),
-        db.func.lower(db.func.trim(HealthcareProvider.region)) == patient_region,
-    ).all()
-    for provider in providers:
-        send_push(provider.phone_number, 'EMERGENCY ALERT', f'{patient.full_name} at {alert.location}: {alert.condition}')
-    send_sms(NEAREST_FACILITY_CONTACT, f'Emergency: {patient.full_name} at {alert.location}: {alert.condition}')
-
-    alert.status = 'notified'
-    db.session.commit()
 
     return jsonify({'emergency_alert': alert.to_dict(), 'providers_notified': len(providers)}), 201
 

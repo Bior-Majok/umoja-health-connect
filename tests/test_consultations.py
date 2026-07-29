@@ -93,3 +93,76 @@ def test_routine_response_notifies_patient_by_sms(client, app, auth_headers, pro
         from app.models.notification_log import NotificationLog
         patient_sms = NotificationLog.query.filter_by(recipient="+254700000000", channel="sms").all()
         assert any("responded" in log.message for log in patient_sms)
+
+
+def test_child_symptoms_route_to_pediatric_provider_over_general(client, admin_headers, auth_headers, provider_headers):
+    # provider_headers fixture is a "General Medicine" provider in Nairobi (least loaded
+    # by default); register a pediatric-specialized provider in the same region and
+    # confirm symptom text mentioning a child routes there instead (FR 2.2).
+    _, general_provider_id = provider_headers
+    reg = client.post("/api/auth/provider/register", json={
+        "full_name": "Dr. Pediatric Test",
+        "phone_number": "+254733112211",
+        "specialization": "Pediatric Medicine",
+        "country": "Kenya",
+        "region": "Nairobi",
+        "password": "providerpass123",
+    })
+    pediatric_provider_id = reg.get_json()["provider"]["provider_id"]
+    client.patch(f"/api/providers/{pediatric_provider_id}/verify", headers=admin_headers)
+
+    res = client.post("/api/consultations", headers=auth_headers, json={"symptoms": "My baby has a high fever"})
+    assert res.status_code == 201
+    assert res.get_json()["consultation"]["provider_id"] == pediatric_provider_id
+    assert res.get_json()["consultation"]["provider_id"] != general_provider_id
+
+
+def test_escalation_sweep_reassigns_stale_critical_consultation(app, client, auth_headers, provider_headers, admin_headers):
+    from datetime import datetime, timedelta
+    from app import db
+    from app.models.consultation import Consultation
+    from app.routes.consultations import run_escalation_sweep
+
+    headers, first_provider_id = provider_headers
+    reg = client.post("/api/auth/provider/register", json={
+        "full_name": "Dr. Backup Provider",
+        "phone_number": "+254733445566",
+        "specialization": "General Medicine",
+        "country": "Kenya",
+        "region": "Nairobi",
+        "password": "providerpass123",
+    })
+    second_provider_id = reg.get_json()["provider"]["provider_id"]
+    client.patch(f"/api/providers/{second_provider_id}/verify", headers=admin_headers)
+
+    create = client.post("/api/consultations", headers=auth_headers, json={"symptoms": "Chest pain"})
+    consultation_id = create.get_json()["consultation"]["id"]
+    assert create.get_json()["consultation"]["provider_id"] == first_provider_id
+
+    with app.app_context():
+        consultation = db.session.get(Consultation, consultation_id)
+        consultation.urgency = "critical"
+        consultation.assigned_at = datetime.utcnow() - timedelta(hours=3)
+        db.session.commit()
+
+        escalated_ids = run_escalation_sweep()
+        assert consultation_id in escalated_ids
+
+        refreshed = db.session.get(Consultation, consultation_id)
+        assert refreshed.provider_id == second_provider_id
+        assert refreshed.escalation_count == 1
+
+
+def test_escalation_sweep_leaves_fresh_consultations_alone(app, client, auth_headers, provider_headers):
+    from app import db
+    from app.models.consultation import Consultation
+    from app.routes.consultations import run_escalation_sweep
+
+    headers, provider_id = provider_headers
+    create = client.post("/api/consultations", headers=auth_headers, json={"symptoms": "Mild headache"})
+    consultation_id = create.get_json()["consultation"]["id"]
+
+    with app.app_context():
+        escalated_ids = run_escalation_sweep()
+        assert consultation_id not in escalated_ids
+        assert db.session.get(Consultation, consultation_id).provider_id == provider_id

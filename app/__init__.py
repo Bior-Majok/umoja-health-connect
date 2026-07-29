@@ -32,6 +32,7 @@ def create_app(config_overrides=None):
     from app.routes.admin_reports import admin_reports_bp
     from app.routes.labels import labels_bp
     from app.routes.health_facilities import health_facilities_bp
+    from app.routes.sms import sms_bp
 
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(provider_auth_bp, url_prefix='/api/auth/provider')
@@ -46,6 +47,7 @@ def create_app(config_overrides=None):
     app.register_blueprint(admin_reports_bp, url_prefix='/api/admin/reports')
     app.register_blueprint(labels_bp, url_prefix='/api/labels')
     app.register_blueprint(health_facilities_bp, url_prefix='/api/facilities')
+    app.register_blueprint(sms_bp, url_prefix='/api/sms')
 
     @app.route('/')
     def index():
@@ -56,5 +58,9 @@ def create_app(config_overrides=None):
 
     with app.app_context():
         db.create_all()
+
+    if not app.config.get('TESTING'):
+        from app.services.scheduler import start_scheduler
+        start_scheduler(app)
 
     return app
