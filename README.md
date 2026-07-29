@@ -257,6 +257,18 @@ The included `Procfile` (`web: gunicorn run:app`) works on any platform that run
 
 ## Known limitations
 
+- **SMS delivery is currently mocked, not real.** The Africa's Talking integration code
+  in `app/services/notifications.py` is fully implemented and tested — it calls the real
+  Africa's Talking messaging API with the correct request format — but it only activates
+  if `AFRICASTALKING_USERNAME`/`AFRICASTALKING_API_KEY` are set, and this project doesn't
+  have a funded Africa's Talking account configured. Their sandbox tier is free to sign
+  up for, but sending real SMS to real phone numbers beyond trial credits requires a paid,
+  verified account, which is out of scope for a course prototype. Without those
+  credentials, `send_sms()` automatically falls back to a mocked sender that logs the
+  message and records it in `NotificationLog` — so the full notification pipeline
+  (emergency alerts, appointment reminders, consultation responses) is still verifiable
+  end-to-end in the UI and test suite, it just doesn't reach a real phone. Push
+  notifications (`send_push()`, Firebase) are mocked the same way, unconditionally.
 - Non-English health-education/UI content is a best-effort translation, not medically
   vetted — flagged via the `is_verified` field per the SRS's business rule that clinical
   content requires expert review before publishing
