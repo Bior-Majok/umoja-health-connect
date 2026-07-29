@@ -135,6 +135,7 @@ async function loadProviderConsultations() {
         </div>
         <div class="list-item-meta">
           <span class="status-badge ${c.urgency === "critical" ? "critical" : c.status}">${c.urgency === "critical" ? "critical" : c.status}</span>
+          <button type="button" class="secondary records-btn" data-patient-id="${c.patient_id}">View records</button>
           ${c.status !== "closed" ? `<button type="button" class="secondary respond-btn" data-id="${c.id}">Respond</button>` : ""}
         </div>
       </div>`
@@ -147,6 +148,42 @@ async function loadProviderConsultations() {
       openModal("respond-modal");
     });
   });
+
+  container.querySelectorAll(".records-btn").forEach((btn) => {
+    btn.addEventListener("click", () => showPatientRecords(btn.dataset.patientId));
+  });
+}
+
+async function showPatientRecords(patientId) {
+  openModal("patient-records-modal");
+  const titleEl = document.getElementById("patient-records-title");
+  const listEl = document.getElementById("patient-records-list");
+  titleEl.textContent = "Patient records";
+  listEl.innerHTML = '<p class="empty-state">Loading...</p>';
+  const res = await providerAuthFetch(`/api/records/patient/${patientId}`);
+  if (!res) return;
+  const data = await res.json();
+  if (!res.ok) {
+    listEl.innerHTML = `<p class="empty-state">${data.error || "Could not load records."}</p>`;
+    return;
+  }
+  titleEl.textContent = `Records — ${data.patient.full_name}`;
+  if (!data.records.length) {
+    listEl.innerHTML = '<p class="empty-state">No records on file for this patient yet.</p>';
+    return;
+  }
+  listEl.innerHTML = data.records
+    .map(
+      (r) => `
+      <div class="list-item">
+        <div>
+          <div class="title">${r.title}</div>
+          <div class="subtitle">${r.details || ""}${r.details ? " · " : ""}${formatDateTime(r.recorded_at)}</div>
+        </div>
+        <span class="status-badge ${r.status}">${r.status}</span>
+      </div>`
+    )
+    .join("");
 }
 
 function initProviderDashboard() {
@@ -156,6 +193,9 @@ function initProviderDashboard() {
 
   const closeBtn = document.getElementById("respond-modal-cancel");
   if (closeBtn) closeBtn.addEventListener("click", () => closeModal("respond-modal"));
+
+  const recordsCloseBtn = document.getElementById("patient-records-close");
+  if (recordsCloseBtn) recordsCloseBtn.addEventListener("click", () => closeModal("patient-records-modal"));
 
   const form = document.getElementById("respond-form");
   if (form) {

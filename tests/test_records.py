@@ -34,3 +34,28 @@ def test_create_requires_title(client, auth_headers):
 def test_create_rejects_bad_status(client, auth_headers):
     res = client.post("/api/records", headers=auth_headers, json={"title": "X", "status": "unknown"})
     assert res.status_code == 400
+
+
+def test_unassigned_provider_cannot_view_patient_records(client, auth_headers, provider_headers):
+    headers, provider_id = provider_headers
+    me = client.get("/api/auth/me", headers=auth_headers)
+    patient_id = me.get_json()["patient"]["patient_id"]
+
+    res = client.get(f"/api/records/patient/{patient_id}", headers=headers)
+    assert res.status_code == 403
+
+
+def test_assigned_provider_can_view_patient_records_via_consultation(client, auth_headers, provider_headers):
+    headers, provider_id = provider_headers
+    me = client.get("/api/auth/me", headers=auth_headers)
+    patient_id = me.get_json()["patient"]["patient_id"]
+
+    client.post("/api/records", headers=auth_headers, json={"title": "Blood Pressure Screening"})
+    create = client.post("/api/consultations", headers=auth_headers, json={"symptoms": "Fever"})
+    assert create.get_json()["consultation"]["provider_id"] == provider_id
+
+    res = client.get(f"/api/records/patient/{patient_id}", headers=headers)
+    assert res.status_code == 200
+    body = res.get_json()
+    assert body["patient"]["patient_id"] == patient_id
+    assert len(body["records"]) == 1

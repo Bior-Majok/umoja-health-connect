@@ -3,6 +3,9 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import get_jwt_identity
 from app import db
 from app.models.record import MedicalRecord
+from app.models.patient import Patient
+from app.models.consultation import Consultation
+from app.models.appointment import Appointment
 from app.utils.auth import require_role
 
 records_bp = Blueprint('records', __name__)
@@ -18,6 +21,35 @@ def list_records():
         .all()
     )
     return jsonify({'records': [r.to_dict() for r in records]}), 200
+
+
+@records_bp.route('/patient/<patient_id>', methods=['GET'])
+@require_role('provider')
+def list_records_for_provider(patient_id):
+    # FR 5.2: assigned providers can retrieve a patient's records — "assigned" means
+    # the provider has an existing consultation or appointment with that patient,
+    # not open access to every patient in the system.
+    provider_id = get_jwt_identity()
+    is_assigned = (
+        Consultation.query.filter_by(provider_id=provider_id, patient_id=patient_id).first()
+        or Appointment.query.filter_by(provider_id=provider_id, patient_id=patient_id).first()
+    )
+    if not is_assigned:
+        return jsonify({'error': 'You are not assigned to this patient'}), 403
+
+    patient = Patient.query.filter_by(patient_id=patient_id).first()
+    if not patient:
+        return jsonify({'error': 'Patient not found'}), 404
+
+    records = (
+        MedicalRecord.query.filter_by(patient_id=patient_id)
+        .order_by(MedicalRecord.recorded_at.desc())
+        .all()
+    )
+    return jsonify({
+        'patient': {'patient_id': patient.patient_id, 'full_name': patient.full_name},
+        'records': [r.to_dict() for r in records],
+    }), 200
 
 
 @records_bp.route('', methods=['POST'])
