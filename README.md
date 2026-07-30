@@ -8,7 +8,8 @@ app, or plain SMS for patients with no smartphone or internet access.
 *(Hosted on Render's free tier — if the app hasn't been visited in a while, the first
 request can take 20-50 seconds to load while the instance wakes up. This is normal;
 just wait for it, don't refresh.)*
-**SRS document:** _add your SRS link here before submitting_
+**SRS document:** https://docs.google.com/document/d/1HAiHjE2wRvWW3Xu_Ph1k2qCGCjeXXymdSvyY3h0WgMA/edit?usp=sharing
+**Demo video:** https://youtu.be/H6ClbAHCNzM
 
 Built to satisfy the project's Software Requirements Specification (SRS): patient
 registration, symptom-based teleconsultation, emergency alerts, appointment scheduling,
