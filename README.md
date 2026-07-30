@@ -5,6 +5,9 @@ conflict-affected African communities with verified healthcare providers — via
 app, or plain SMS for patients with no smartphone or internet access.
 
 **Live demo:** https://umoja-health-connect.onrender.com
+*(Hosted on Render's free tier — if the app hasn't been visited in a while, the first
+request can take 20-50 seconds to load while the instance wakes up. This is normal;
+just wait for it, don't refresh.)*
 **SRS document:** _add your SRS link here before submitting_
 
 Built to satisfy the project's Software Requirements Specification (SRS): patient
