@@ -185,12 +185,13 @@ healthcare providers so they can start receiving consultations and appointments.
 pytest
 ```
 
-66 tests covering:
+70 tests covering:
 - Authentication for all four roles, including account lockout
 - Consultations — auto-assignment, symptom-based routing, SLA auto-escalation, critical escalation to emergency alerts
 - Emergency alerts — trigger, provider/facility notification fan-out, resolution
 - Appointments, medical records (including provider access), health education
 - Inbound SMS commands
+- HTTP admin provisioning (`/api/setup/seed-admin`)
 - Health facility directory, admin reports, i18n labels
 
 ---
@@ -215,6 +216,7 @@ All endpoints are prefixed `/api`. JSON in, JSON out, JWT bearer auth except whe
 | `/api/admin/reports` | Admin-only aggregate reporting |
 | `/api/labels` | UI translations, `?lang=en\|fr\|sw\|ar` |
 | `/api/sms/inbound` | Webhook for inbound SMS commands (no JWT — see [Wiring real SMS](#wiring-real-sms-outbound--inbound)) |
+| `/api/setup/seed-admin` | One-time admin provisioning over HTTP for hosts without shell access (no JWT — secret-gated, see [Creating an administrator account](#creating-an-administrator-account)) |
 
 ---
 
@@ -232,6 +234,7 @@ production:
 | `AFRICASTALKING_USERNAME` / `AFRICASTALKING_API_KEY` | No | Enables real outbound SMS delivery. Falls back to a mocked/logged sender if unset |
 | `AFRICASTALKING_SANDBOX` | No | Defaults to `true`; set to `false` once out of Africa's Talking sandbox |
 | `SMS_INBOUND_SECRET` | Recommended if using inbound SMS | Shared secret the SMS gateway must echo back so `/api/sms/inbound` can't be spoofed by an arbitrary POST |
+| `SETUP_SECRET` | Only if using HTTP admin provisioning | Unlocks `POST /api/setup/seed-admin`. Unset by default, which keeps that endpoint refusing every request |
 
 ---
 
