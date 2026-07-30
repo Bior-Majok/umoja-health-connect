@@ -34,3 +34,8 @@ class Config:
     # free-text medical fields via app/utils/crypto.py. Falls back to a fixed dev key so
     # local/test runs work out of the box; production deployments should set a real key.
     ENCRYPTION_KEY = os.environ.get('ENCRYPTION_KEY')
+
+    # Unlocks POST /api/setup/seed-admin — an HTTP alternative to `flask seed-admin` for
+    # hosts without shell access (e.g. Render's free tier). Unset by default, which
+    # keeps the endpoint refusing all requests.
+    SETUP_SECRET = os.environ.get('SETUP_SECRET')

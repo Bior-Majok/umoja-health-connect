@@ -165,6 +165,17 @@ healthcare providers so they can start receiving consultations and appointments.
 
 > **Deploying to Render or another host?** Run the same command from the host's shell
 > (e.g. Render's "Shell" tab) — each environment has its own separate database.
+>
+> **On Render's free tier, Shell access requires a paid plan.** As an alternative, set
+> `SETUP_SECRET` as an environment variable, then call the HTTP equivalent:
+> ```bash
+> curl -X POST https://<your-domain>/api/setup/seed-admin \
+>   -H "X-Setup-Secret: <SETUP_SECRET>" \
+>   -H "Content-Type: application/json" \
+>   -d '{"full_name": "Your Name", "phone_number": "+254700000000", "password": "yourpassword"}'
+> ```
+> See `app/routes/setup.py` — this endpoint refuses every request unless `SETUP_SECRET`
+> is set, so it's inert on any deployment that hasn't opted in.
 
 ---
 

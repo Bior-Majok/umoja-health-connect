@@ -33,6 +33,7 @@ def create_app(config_overrides=None):
     from app.routes.labels import labels_bp
     from app.routes.health_facilities import health_facilities_bp
     from app.routes.sms import sms_bp
+    from app.routes.setup import setup_bp
 
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(provider_auth_bp, url_prefix='/api/auth/provider')
@@ -48,6 +49,7 @@ def create_app(config_overrides=None):
     app.register_blueprint(labels_bp, url_prefix='/api/labels')
     app.register_blueprint(health_facilities_bp, url_prefix='/api/facilities')
     app.register_blueprint(sms_bp, url_prefix='/api/sms')
+    app.register_blueprint(setup_bp, url_prefix='/api/setup')
 
     @app.route('/')
     def index():
